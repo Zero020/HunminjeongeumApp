@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.android.hunminjeongeumapp.quiz_a.QuizAActivity
+import com.android.hunminjeongeumapp.quiz_b.QuizBActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,11 +18,17 @@ class MainActivity : AppCompatActivity() {
 
         // 버튼 초기화
         val buttonToCGame = findViewById<Button>(R.id.button_to_C_Game)
+        val buttonToUGame = findViewById<Button>(R.id.button_to_U_Game)
         val buttonToCraft = findViewById<Button>(R.id.button_to_Craft)
 
         // 버튼 클릭 시 액티비티 이동
         buttonToCGame.setOnClickListener {
             val intent = Intent(this, QuizAActivity::class.java)
+            startActivity(intent)
+        }
+
+        buttonToUGame.setOnClickListener {
+            val intent = Intent(this, QuizBActivity::class.java)
             startActivity(intent)
         }
 

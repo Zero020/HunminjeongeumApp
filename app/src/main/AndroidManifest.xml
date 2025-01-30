@@ -32,6 +32,13 @@
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".quiz_b.RankingBActivity"
+            android:exported="false" />
+        <activity
+            android:name=".quiz_b.QuizBActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
         </activity>
