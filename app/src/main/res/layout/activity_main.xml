@@ -1,19 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/realmain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Hello World!"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/button_Hint_Craft"
+        android:layout_width="74dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="20dp"
+        android:text="\?"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_to_Craft"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_Hint_U" />
+
+    <Button
+        android:id="@+id/button_Hint_U"
+        android:layout_width="74dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="20dp"
+        android:text="\?"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_to_U_Game"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_Hint_C" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="254dp"
+        android:layout_height="191dp"
+        android:background="#FFD4D4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.324"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.122" />
+
+    <Button
+        android:id="@+id/button_to_C_Game"
+        android:layout_width="220dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="350dp"
+        android:layout_marginEnd="44dp"
+        android:text="초성 놀이"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_to_Craft"
+        android:layout_width="220dp"
+        android:layout_height="66dp"
+        android:layout_marginEnd="44dp"
+        android:text="놀이 제작"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_Hint_Craft" />
+
+    <Button
+        android:id="@+id/button_to_U_Game"
+        android:layout_width="220dp"
+        android:layout_height="66dp"
+        android:layout_marginEnd="44dp"
+        android:text="유의어 찾기"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_Hint_U" />
+
+    <Button
+        android:id="@+id/button_Hint_C"
+        android:layout_width="74dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="44dp"
+        android:text="\?"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_to_C_Game"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_to_C_Game" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="224dp"
+        android:layout_height="152dp"
+        android:text="TextView"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintStart_toStartOf="@+id/view2"
+        app:layout_constraintTop_toTopOf="@+id/view2" />
+</androidx.constraintlayout.widget.ConstraintLayout>
