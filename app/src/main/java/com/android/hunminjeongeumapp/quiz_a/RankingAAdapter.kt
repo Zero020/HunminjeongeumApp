@@ -40,14 +40,7 @@ class RankingAAdapter(private val rankingList: List<Rank>) : RecyclerView.Adapte
             rankPosition.text = rank.position.toString()
             username.text = rank.username
 
-            val minutes = rank.timeTaken / 60
-            val seconds = rank.timeTaken % 60
-
-            if (minutes == 0){
-                timeTaken.text = String.format("%02ds", minutes, seconds)
-            }else{
-                timeTaken.text = String.format("%dm %02ds", minutes, seconds)
-            }
+            timeTaken.text = "${rank.timeTaken}s"
 
             accuracy.text = "(${String.format("%.2f", rank.accuracy * 100)}%)"
         }

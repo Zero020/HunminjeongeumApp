@@ -78,30 +78,20 @@
         android:layout_width="0dp"
         android:layout_height="58dp"
         android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="50dp"
         android:background="#FFFFFF"
         android:backgroundTint="#FFFFFF"
-        android:hint="이름을 입력하세요"
+        android:hint="이름을 입력하거라"
+        android:imeOptions="actionDone"
+        android:inputType="text"
         android:padding="12dp"
+        android:singleLine="true"
         android:textColor="#000000"
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/inputButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <!-- 랭킹 등록버튼 -->
-    <Button
-        android:id="@+id/inputButton"
-        android:layout_width="wrap_content"
-        android:layout_height="58dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="50dp"
-        android:background="#6BC6B3"
-        android:text="입력"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageButton
         android:id="@+id/homeButton"

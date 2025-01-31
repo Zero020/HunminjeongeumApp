@@ -42,7 +42,7 @@ class QuizAActivity : AppCompatActivity() {
     var currentQuestionIndex = 0
     var questionsList = mutableListOf<Question>()
 
-    var timeLimit: Long = 120000 // 2분
+    var timeLimit: Long = 60000 // 1분
     lateinit var countDownTimer: CountDownTimer
 
     var totalCorrectAnswers = 0
@@ -109,7 +109,9 @@ class QuizAActivity : AppCompatActivity() {
 
         showQuestion() // 첫 번째 문제 표시
         // EditText에 포커스가 있을 때 키보드 상태 체크
-        answer.setOnFocusChangeListener { _, hasFocus ->                darkBackground.visibility = FrameLayout.VISIBLE
+        answer.setOnFocusChangeListener { _, hasFocus ->
+
+            darkBackground.visibility = FrameLayout.VISIBLE
 
             if (hasFocus) {
 
