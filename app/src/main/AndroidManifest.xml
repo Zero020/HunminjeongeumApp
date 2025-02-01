@@ -29,8 +29,9 @@
             android:exported="false" />
         <activity
             android:name=".quiz_a.QuizAActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".quiz_b.RankingBActivity"
             android:exported="false" />

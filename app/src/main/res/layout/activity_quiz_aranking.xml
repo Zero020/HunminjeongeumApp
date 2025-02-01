@@ -1,119 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#97C1D1"
     tools:context=".quiz_a.RankingAActivity">
+
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="509dp"
+        android:layout_height="861dp"
+        android:layout_gravity="fill"
+        android:scaleType="centerCrop"
+        android:src="@drawable/a_ranking_barkground"
+        android:transformPivotX="10dp"
+        android:translationX="-40dp"
+        android:translationY="-20dp" />
+    <!--결과 양피지-->
+    <ImageView
+        android:id="@+id/paperImage"
+        android:layout_width="310dp"
+        android:layout_height="130dp"
+        android:translationX="20dp"
+        android:translationY="65dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/a_ranking_result" />
+    <!--세종대왕-->
+    <ImageView
+        android:id="@+id/moonImage"
+        android:layout_width="400dp"
+        android:layout_height="610dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/a_ranking_king"
+        android:translationX="110dp"
+        android:translationY="140dp" />
+    <!--순위는 5위까지만 안내문-->
 
     <!-- 상단 텍스트 "(걸린시간)이구나,(정답률)이다" -->
     <TextView
         android:id="@+id/ResultText"
         android:layout_width="241dp"
         android:layout_height="95dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="52dp"
+        android:fontFamily="@font/chungjukimsaeng"
         android:paddingStart="16dp"
         android:paddingTop="16dp"
-        android:text="(시간)이구나, (정답률)~~했다"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
+        android:text="수고했느리라"
+        android:translationX="20dp"
+        android:translationY="30dp"
+        android:lineSpacingExtra = "20dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 순위 TextView -->
-
-    <!-- 순위컬럼 TextView -->
-
-    <TextView
+    <ImageView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="291dp"
-        android:layout_marginBottom="52dp"
-        android:text="순위"
-        android:textSize="48sp"
-        app:layout_constraintBottom_toTopOf="@+id/rankText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ResultText" />
+        android:layout_width="130dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="226dp"
+        android:translationX="0dp"
+        android:translationY="0dp"
+        android:src="@drawable/a_ranking_text1" />
 
-    <TextView
+    <!-- 이름  시간(정답률)  순위  -->
+    <ImageView
         android:id="@+id/rankText"
-        android:layout_width="345dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:background="#A9B8B7B7"
-        android:backgroundTint="#91C3BABA"
-        android:paddingStart="16dp"
-        android:text="이름              시간(정답률)            순위"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        android:layout_width="match_parent"
+        android:layout_height="304dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="320dp"
+        android:layout_marginEnd="20dp"
+        android:scaleType="fitXY"
+        android:translationX="0dp"
+        android:translationY="0dp"
+        android:src="@drawable/a_ranking_list" />
 
     <!-- 리사이클러뷰 (랭킹 항목 표시) -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rankingList"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="32dp"
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="133dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="259dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/nameInput"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rankText" />
-
-    <!-- 랭킹 사용자 입력 -->
-    <EditText
-        android:id="@+id/nameInput"
-        android:layout_width="0dp"
-        android:layout_height="58dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="50dp"
-        android:background="#FFFFFF"
-        android:backgroundTint="#FFFFFF"
-        android:hint="이름을 입력하거라"
-        android:imeOptions="actionDone"
-        android:inputType="text"
-        android:padding="12dp"
-        android:singleLine="true"
-        android:textColor="#000000"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:fontFamily="@font/chungjukimsaeng"
+        android:text="순위는 5위까지만 표시됩니다"
+        android:textColor="#565454"
+        android:textSize="10dp"
+        android:translationX="-20dp"
+        android:translationY="600dp" />
 
     <ImageButton
         android:id="@+id/homeButton"
-        android:layout_width="64dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="22dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="259dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="32dp"
-        android:text="순위는 5위까지만 표시됩니다"
-        android:textSize="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="홈 버튼"
+        android:elevation="5dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/a_ranking_home"
+        android:translationX="360dp"
+        android:translationY="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/rankText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rankingList" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rankingList"
+        android:layout_width="370dp"
+        android:layout_height="250dp"
+        android:layout_marginBottom="0dp"
+        android:background="@android:color/transparent"
+        android:elevation="100dp"
+        android:translationX="20dp"
+        android:translationY="370dp"
+        app:layout_constraintBottom_toTopOf="@+id/nameInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rankText">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <EditText
+        android:id="@+id/nameInput"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="34dp"
+        android:background="@drawable/a_ranking_edit"
+        android:backgroundTint="#FFFFFF"
+        android:elevation="500dp"
+        android:fontFamily="@font/kimjungchulmyungjoregular"
+        android:hint="이름을 입력하거라"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:layerType="none"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textColorHint="@color/white"
+        android:textSize="18sp"
+        android:translationX="0dp"
+        android:translationY="640dp" />
+
+</FrameLayout>

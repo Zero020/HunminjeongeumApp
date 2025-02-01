@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.hunminjeongeumapp.R
 import android.database.sqlite.SQLiteDatabase
 import android.database.Cursor
+import android.os.Build
 import android.view.KeyEvent
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText.*
@@ -49,6 +51,7 @@ class RankingAActivity : AppCompatActivity() {
         val minutes = receivedTime.toInt() / 60
         val seconds = receivedTime.toInt() % 60
 
+        setFullScreen()
         // 랭킹 DB에서 가져오기
         loadRankingData()
 
@@ -60,7 +63,7 @@ class RankingAActivity : AppCompatActivity() {
             // 이름 입력 필드 및 버튼 비활성화
             nameInput.isEnabled = false
             nameInput.visibility = EditText.INVISIBLE
-            resultText.text = "참으로 아쉽구나, 수고많았느리라"
+            resultText.text = "참으로 아쉽구나, \n 수고많았느리라"
 
         }else if(receivedAccuracy == 0f){
             Toast.makeText(this, "정답률 0%로 인해 순위에 등록하지 못하느리라.", Toast.LENGTH_SHORT).show()
@@ -76,7 +79,7 @@ class RankingAActivity : AppCompatActivity() {
 
             if (minutes != 1) {
                 resultText.text = String.format("%02d초", seconds) + "동안, " +
-                        " ${String.format("%.2f", receivedAccuracy * 100)}%맞췄다, \n 수고많았느리라"
+                        " ${String.format("%.2f", receivedAccuracy * 100)}%군, \n 수고많았느리라"
 
             }
         }
@@ -132,6 +135,16 @@ class RankingAActivity : AppCompatActivity() {
             rankingRecyclerView.adapter = RankingAAdapter(rankingList)
         }
 
+    fun setFullScreen() {
+        var uiOption = window.decorView.systemUiVisibility
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+            uiOption = uiOption or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+            uiOption = uiOption or View.SYSTEM_UI_FLAG_FULLSCREEN
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            uiOption = uiOption or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = uiOption
+    }
         // 게임 결과 저장
         fun saveGameResult(username: String, accuracy: Float, timeTaken: Int, incorrectWords: String?) {
             val dbManager = QuizADBManager(this, "quizA.db", null, 1)

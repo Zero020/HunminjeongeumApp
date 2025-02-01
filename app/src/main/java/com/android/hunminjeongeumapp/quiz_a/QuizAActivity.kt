@@ -5,10 +5,13 @@ import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.SystemClock
 import android.view.MotionEvent
+import android.view.View
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -17,6 +20,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.android.hunminjeongeumapp.R
 
 
@@ -31,8 +35,16 @@ class QuizAActivity : AppCompatActivity() {
     lateinit var timer: TextView
     lateinit var number: TextView
     lateinit var resultImage: ImageView // 정답/오답 이미지
+
+    lateinit var resultImage2: ImageView //오답 이미지2
     lateinit var countdownText: TextView
     lateinit var darkBackground: FrameLayout
+    lateinit var king_smile: ImageView
+    lateinit var king_angry:ImageView
+
+    lateinit var basicBackground: ImageView
+    lateinit var mountain_appear: ImageView
+    lateinit var moon_appear: ImageView
 
     lateinit var correct_answer: String
     lateinit var hint1: String
@@ -51,6 +63,8 @@ class QuizAActivity : AppCompatActivity() {
     var isPaused = false // 타이머 상태 체크
     var timeLeftAtPause: Long = 0 // 타이머가 멈춘 시점
     var startTime: Long = 0
+    val fastFadeIn = AnimationUtils.loadAnimation(this, R.anim.fast_fade_in)
+
 
     //Edit 화면외에 클릭시 키보드 내리기
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -79,11 +93,35 @@ class QuizAActivity : AppCompatActivity() {
         timer = findViewById(R.id.timer)
         number = findViewById(R.id.number)
         resultImage = findViewById(R.id.resultImageView) // 결과 이미지
+
+        //효과적인 요소들
+        basicBackground = findViewById(R.id.basicImage)
         countdownText = findViewById(R.id.countdownText)
         darkBackground = findViewById(R.id.darkBackground)
+        mountain_appear = findViewById(R.id.mountainView)
+        moon_appear = findViewById(R.id.moonImage)
+        king_angry = findViewById(R.id.king_angry)
+        king_smile = findViewById(R.id.king_smile)
+        resultImage2 = findViewById(R.id.resultImageView2)
+
+        resultImage2.visibility = ImageView.INVISIBLE
+        king_angry.visibility = ImageView.INVISIBLE
+        king_smile.visibility = ImageView.INVISIBLE
 
         dbManager = QuizADBManager(this, "quizA.db", null, 1)
         sqlitedb = dbManager.readableDatabase
+
+        val mountainAnimation = AnimationUtils.loadAnimation(this, R.anim.a_mountain_apper)
+        val sunAnimation = AnimationUtils.loadAnimation(this, R.anim.a_sun_appear)
+        val slowFadeIn = AnimationUtils.loadAnimation(this, R.anim.slow_fade_in)
+
+
+        findViewById<View>(R.id.mountainView).startAnimation(mountainAnimation)
+        findViewById<View>(R.id.moonImage).startAnimation(sunAnimation)
+        findViewById<View>(R.id.basicImage2_king_appear).startAnimation(slowFadeIn)
+
+        setFullScreen()
+
 
         var cursor: Cursor? = sqlitedb.rawQuery("SELECT * FROM questions ORDER BY RANDOM() LIMIT 3", null)
         while (cursor?.moveToNext() == true) {
@@ -104,21 +142,28 @@ class QuizAActivity : AppCompatActivity() {
 
         showCountdown()
 
-        // 타이머 설정: 2분 후 showResult 호출
+        // 타이머 설정: 1분 후 showResult 호출
         //startCountdownTimer()
 
         showQuestion() // 첫 번째 문제 표시
+
+
         // EditText에 포커스가 있을 때 키보드 상태 체크
         answer.setOnFocusChangeListener { _, hasFocus ->
-
-            darkBackground.visibility = FrameLayout.VISIBLE
-
             if (hasFocus) {
+                // darkBackground를 표시
+                darkBackground.visibility = FrameLayout.VISIBLE
 
+                // EditText를 위로 100dp만큼 올림
+                answer.translationY = -400f * resources.displayMetrics.density
             } else {
                 // 키보드가 내려가면 darkBackground 숨기기
                 darkBackground.visibility = FrameLayout.GONE
 
+                // EditText 위치 원상복구
+                answer.translationY = 0f
+
+                // 키보드 숨기기
                 val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(answer.windowToken, 0)
             }
@@ -148,7 +193,17 @@ class QuizAActivity : AppCompatActivity() {
     }
 
 
-    // 2분 카운트다운 타이머
+    fun setFullScreen(){
+        var uiOption = window.decorView.systemUiVisibility
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+            uiOption = uiOption or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+            uiOption = uiOption or View.SYSTEM_UI_FLAG_FULLSCREEN
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            uiOption = uiOption or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = uiOption
+    }
+    // 1분 카운트다운 타이머
     fun startCountdownTimer() {
         countDownTimer = object : CountDownTimer(timeLimit, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -193,16 +248,22 @@ class QuizAActivity : AppCompatActivity() {
             //totalCorrectAnswers++
             showCorrectAnswer()
             answer.text.clear()
+            answer.translationY = 0f
+
         } else {
             // 오답 처리
             showIncorrectAnswer()
             answer.text.clear()
+            answer.translationY = 0f
+
         }
     }
 
     // 정답 처리
     fun showCorrectAnswer() {
-        resultImage.setImageResource(R.drawable.sun) // 정답 이미지
+        resultImage.setImageResource(R.drawable.a_quiz_correct) // 정답 이미지
+        findViewById<View>(R.id.king_smile).startAnimation(fastFadeIn)
+        king_smile.visibility = ImageView.VISIBLE
         Toast.makeText(this, "정답입니다!", Toast.LENGTH_SHORT).show()
 
         totalCorrectAnswers++
@@ -213,7 +274,7 @@ class QuizAActivity : AppCompatActivity() {
 
         resultImage.postDelayed({
             moveToNextQuestion()
-
+            king_smile.visibility = ImageView.INVISIBLE
         }, 2000)
 
     }
@@ -234,12 +295,15 @@ class QuizAActivity : AppCompatActivity() {
         }
     }
 
+    //게임시작전 3, 2, 1 카운트다운
     fun showCountdown() {
         countdownText.visibility = TextView.VISIBLE
         answer.isEnabled = false
+        answer.visibility = EditText.INVISIBLE
+        question.visibility = TextView.INVISIBLE
+        description.visibility = TextView.INVISIBLE
 
-
-        var countdown = 3 // "3, 2, 1, go!" 순으로 진행
+        var countdown = 3 // "3, 2, 1" 순으로 진행
 
         val countdownTimer = object : CountDownTimer(4000, 1000) { // 4초간 카운트다운
             override fun onTick(millisUntilFinished: Long) {
@@ -253,7 +317,12 @@ class QuizAActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
+                answer.visibility = View.VISIBLE
+                question.visibility = View.VISIBLE
+                description.visibility = View.VISIBLE
                 countdownText.visibility = TextView.INVISIBLE // 카운트다운 끝나면 텍스트 숨기기
+                //basicBackground.setImageResource(R.drawable.a_quiz_background)
+
                 showQuestion()  // 문제 표시
                 startCountdownTimer()
             }
@@ -262,7 +331,11 @@ class QuizAActivity : AppCompatActivity() {
     }
 
     fun showIncorrectAnswer() {
-        resultImage.setImageResource(R.drawable.night)
+        resultImage.setImageResource(R.drawable.a_quiz_incorrect1)
+        resultImage2.visibility = ImageView.VISIBLE
+        king_angry.visibility = ImageView.VISIBLE
+        findViewById<View>(R.id.king_angry).startAnimation(fastFadeIn)
+
         incorrectAttempts++
         totalAttempts++
         when (incorrectAttempts) {
@@ -272,7 +345,9 @@ class QuizAActivity : AppCompatActivity() {
                 resultImage.postDelayed({
                     resultImage.setImageResource(0)
                     resumeTimer()
-                }, 1500)
+                    resultImage2.visibility = ImageView.INVISIBLE
+                    king_angry.visibility = ImageView.INVISIBLE
+                }, 2000)
             }
             2 -> {
                 question.text = hint2
@@ -280,7 +355,9 @@ class QuizAActivity : AppCompatActivity() {
                 resultImage.postDelayed({
                     resultImage.setImageResource(0)
                     resumeTimer()
-                }, 1500)
+                    resultImage2.visibility = ImageView.INVISIBLE
+                    king_angry.visibility = ImageView.INVISIBLE
+                }, 2000)
             }
             3 ->  {
                 question.text = correct_answer
@@ -290,9 +367,10 @@ class QuizAActivity : AppCompatActivity() {
                 if (currentQuestionIndex < 3){
                     resultImage.postDelayed({
                         resultImage.setImageResource(0)
+                        king_angry.visibility = ImageView.INVISIBLE
                         resumeTimer()
                         showQuestion()
-                    }, 1500)
+                    }, 2000)
                 }else {
                     resultImage.postDelayed({
                         resultImage.setImageResource(0)
