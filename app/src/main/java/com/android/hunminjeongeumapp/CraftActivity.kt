@@ -9,8 +9,12 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.hunminjeongeumapp.quiz_a.QuizADBManager
+import com.android.hunminjeongeumapp.quiz_b.QuizBDBManager
 
 class CraftActivity : AppCompatActivity() {
+
+    private var isChosungGameSelected = true // 초성 놀이 기본 선택
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_craft)
@@ -37,89 +41,131 @@ class CraftActivity : AppCompatActivity() {
         val editTextCraftU2 = findViewById<EditText>(R.id.editTextText_Craft_U_2)
         val editTextCraftU3 = findViewById<EditText>(R.id.editTextText_Craft_U_3)
 
-        // 처음 액티비티가 실행될 때 모든 입력 필드 숨기기
-        val allViews = listOf(
-            textViewCraftC1, textViewCraftC2, textViewCraftC3,
+        // 초기 버튼 투명도 설정
+        buttonCraftCGame.alpha = 1.0f // 기본 선택
+        buttonCraftUGame.alpha = 0.6f
+
+        // ✅ 초성 놀이 UI를 보이게 설정 (처음 실행 시)
+        setVisibilityForGameType(true, textViewCraftC1, textViewCraftC2, textViewCraftC3,
             editTextCraftC1, editTextCraftC2, editTextCraftC3,
             textViewCraftU1, textViewCraftU2, textViewCraftU3,
-            editTextCraftU1, editTextCraftU2, editTextCraftU3
-        )
-        allViews.forEach { it.visibility = View.INVISIBLE }
+            editTextCraftU1, editTextCraftU2, editTextCraftU3)
 
         // 초성 놀이 버튼 클릭 이벤트
         buttonCraftCGame.setOnClickListener {
+            isChosungGameSelected = true
+
+            buttonCraftCGame.alpha = 1.0f
+            buttonCraftUGame.alpha = 0.6f
+
             // 유의어 입력 필드 초기화
             editTextCraftU1.text.clear()
             editTextCraftU2.text.clear()
             editTextCraftU3.text.clear()
 
-            // 초성 놀이 관련 요소 보이기, 유의어 놀이 관련 요소 숨기기
             setVisibilityForGameType(true, textViewCraftC1, textViewCraftC2, textViewCraftC3, editTextCraftC1, editTextCraftC2, editTextCraftC3,
                 textViewCraftU1, textViewCraftU2, textViewCraftU3, editTextCraftU1, editTextCraftU2, editTextCraftU3)
         }
 
         // 유의어 놀이 버튼 클릭 이벤트
         buttonCraftUGame.setOnClickListener {
+            isChosungGameSelected = false
+
+            buttonCraftUGame.alpha = 1.0f
+            buttonCraftCGame.alpha = 0.6f
+
             // 초성 입력 필드 초기화
             editTextCraftC1.text.clear()
             editTextCraftC2.text.clear()
             editTextCraftC3.text.clear()
 
-            // 유의어 놀이 관련 요소 보이기, 초성 놀이 관련 요소 숨기기
             setVisibilityForGameType(false, textViewCraftC1, textViewCraftC2, textViewCraftC3, editTextCraftC1, editTextCraftC2, editTextCraftC3,
                 textViewCraftU1, textViewCraftU2, textViewCraftU3, editTextCraftU1, editTextCraftU2, editTextCraftU3)
         }
 
         // 데이터 저장 버튼 클릭 이벤트
         buttonCraftApply.setOnClickListener {
-            val questionText = editTextCraftC1.text.toString().trim() // 초성 입력
-            val descriptionText = editTextCraftC3.text.toString().trim() // 단어 뜻 입력
-            val answerText = editTextCraftC2.text.toString().trim() // 정답 단어 입력
+            if (isChosungGameSelected) {
+                // 초성 놀이 데이터 저장
+                val questionText = editTextCraftC1.text.toString().trim()
+                val descriptionText = editTextCraftC3.text.toString().trim()
+                val answerText = editTextCraftC2.text.toString().trim()
 
-            // 필수 입력값 체크
-            if (questionText.isEmpty() || descriptionText.isEmpty() || answerText.isEmpty()) {
-                Toast.makeText(this, "모든 항목을 채워주거라", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                if (questionText.isEmpty() || descriptionText.isEmpty() || answerText.isEmpty()) {
+                    Toast.makeText(this, "모든 항목을 채워주거라", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                val hint1 = answerText.first() + questionText.drop(1)
+                val hint2 = questionText.dropLast(1) + answerText.last()
+
+                val dbManager = QuizADBManager(this, "quizA.db", null, 1)
+                val sqlitedb = dbManager.writableDatabase
+
+                val values = ContentValues().apply {
+                    put("description", descriptionText)
+                    put("question", questionText)
+                    put("hint1", hint1)
+                    put("hint2", hint2)
+                    put("answer", answerText)
+                }
+                sqlitedb.insert("questions", null, values)
+                sqlitedb.close()
+
+                Toast.makeText(this, "초성 놀이 데이터가 저장됐노라", Toast.LENGTH_SHORT).show()
+
+                editTextCraftC1.text.clear()
+                editTextCraftC2.text.clear()
+                editTextCraftC3.text.clear()
+            } else {
+                // 유의어 놀이 데이터 저장
+                val questionText = editTextCraftU1.text.toString().trim()
+                val item1Text = editTextCraftU2.text.toString().trim()
+                val item2Text = editTextCraftU3.text.toString().trim()
+
+                if (questionText.isEmpty() || item1Text.isEmpty() || item2Text.isEmpty()) {
+                    Toast.makeText(this, "모든 항목을 채워주거라", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                val dbManager = QuizBDBManager(this, "quizB.db", null, 1)
+                val sqlitedb = dbManager.writableDatabase
+
+                val values = ContentValues().apply {
+                    put("question", questionText)
+                    put("item1", item1Text)
+                    put("item2", item2Text)
+                    put("answer", 0) // 정답 인덱스는 항상 0
+                }
+                sqlitedb.insert("questions", null, values)
+                sqlitedb.close()
+
+                Toast.makeText(this, "유의어 놀이 데이터가 저장됐노라", Toast.LENGTH_SHORT).show()
+
+                editTextCraftU1.text.clear()
+                editTextCraftU2.text.clear()
+                editTextCraftU3.text.clear()
             }
-
-            // hint1: 단어의 첫 글자 + 초성의 첫 글자 제거 후 결합
-            val hint1 = answerText.first() + questionText.drop(1)
-
-            // hint2: 초성의 마지막 글자 제거 + 단어의 마지막 글자 결합
-            val hint2 = questionText.dropLast(1) + answerText.last()
-
-            // 데이터베이스 저장
-            val dbManager = QuizADBManager(this, "quizA.db", null, 1)
-            val sqlitedb = dbManager.writableDatabase
-
-            val values = ContentValues().apply {
-                put("description", descriptionText) // 뜻
-                put("question", questionText) // 초성
-                put("hint1", hint1) // 힌트1
-                put("hint2", hint2) // 힌트2
-                put("answer", answerText) // 정답
-            }
-            sqlitedb.insert("questions", null, values)
-            sqlitedb.close()
-
-            // 저장 완료 메시지
-            Toast.makeText(this, "저장되었느니라", Toast.LENGTH_SHORT).show()
-
-            // 입력 필드 초기화
-            editTextCraftC1.text.clear()
-            editTextCraftC2.text.clear()
-            editTextCraftC3.text.clear()
         }
 
         // 메인 화면으로 이동
         buttonCraftToMain.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-            finish() // 현재 액티비티 종료 (선택 사항)
+            finish()
         }
+
+        // 버튼 초기화
+        val buttonToDataList: Button = findViewById(R.id.button_to_datalist)
+
+        // 버튼 클릭 시 DataListActivity로 이동
+        buttonToDataList.setOnClickListener {
+            val intent = Intent(this, DataListActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
-    // 초성 놀이 & 유의어 놀이 전환 함수
     private fun setVisibilityForGameType(
         isChosungGame: Boolean,
         textViewCraftC1: View, textViewCraftC2: View, textViewCraftC3: View,
@@ -128,7 +174,7 @@ class CraftActivity : AppCompatActivity() {
         editTextCraftU1: View, editTextCraftU2: View, editTextCraftU3: View
     ) {
         if (isChosungGame) {
-            // 초성 놀이 보이기
+            // 초성 놀이 관련 요소 보이기
             textViewCraftC1.visibility = View.VISIBLE
             textViewCraftC2.visibility = View.VISIBLE
             textViewCraftC3.visibility = View.VISIBLE
@@ -136,7 +182,7 @@ class CraftActivity : AppCompatActivity() {
             editTextCraftC2.visibility = View.VISIBLE
             editTextCraftC3.visibility = View.VISIBLE
 
-            // 유의어 놀이 숨기기
+            // 유의어 놀이 관련 요소 숨기기
             textViewCraftU1.visibility = View.INVISIBLE
             textViewCraftU2.visibility = View.INVISIBLE
             textViewCraftU3.visibility = View.INVISIBLE
@@ -144,7 +190,7 @@ class CraftActivity : AppCompatActivity() {
             editTextCraftU2.visibility = View.INVISIBLE
             editTextCraftU3.visibility = View.INVISIBLE
         } else {
-            // 유의어 놀이 보이기
+            // 유의어 놀이 관련 요소 보이기
             textViewCraftU1.visibility = View.VISIBLE
             textViewCraftU2.visibility = View.VISIBLE
             textViewCraftU3.visibility = View.VISIBLE
@@ -152,7 +198,7 @@ class CraftActivity : AppCompatActivity() {
             editTextCraftU2.visibility = View.VISIBLE
             editTextCraftU3.visibility = View.VISIBLE
 
-            // 초성 놀이 숨기기
+            // 초성 놀이 관련 요소 숨기기
             textViewCraftC1.visibility = View.INVISIBLE
             textViewCraftC2.visibility = View.INVISIBLE
             textViewCraftC3.visibility = View.INVISIBLE
@@ -161,4 +207,5 @@ class CraftActivity : AppCompatActivity() {
             editTextCraftC3.visibility = View.INVISIBLE
         }
     }
+
 }
