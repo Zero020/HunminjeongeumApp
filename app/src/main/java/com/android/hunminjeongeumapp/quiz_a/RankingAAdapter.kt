@@ -31,10 +31,10 @@ class RankingAAdapter(private val rankingList: List<Rank>) : RecyclerView.Adapte
     }
 
     inner class RankingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val rankPosition: TextView = itemView.findViewById(R.id.rankPosition)
-        private val username: TextView = itemView.findViewById(R.id.username)
-        private val timeTaken: TextView = itemView.findViewById(R.id.timeTaken)
-        private val accuracy: TextView = itemView.findViewById(R.id.accuracy)
+        private val rankPosition: TextView = itemView.findViewById(R.id.a_rankPosition)
+        private val username: TextView = itemView.findViewById(R.id.a_username)
+        private val timeTaken: TextView = itemView.findViewById(R.id.a_timeTaken)
+        private val accuracy: TextView = itemView.findViewById(R.id.a_accuracy)
 
         fun bind(rank: Rank) {
             rankPosition.text = rank.position.toString()

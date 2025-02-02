@@ -9,7 +9,7 @@
 
 
     <ImageView
-        android:id="@+id/basicImage"
+        android:id="@+id/a_basicImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="fill"
@@ -18,10 +18,11 @@
         android:src="@drawable/a_quiz_back1"
         android:transformPivotX="10dp"
         android:translationX="0dp"
-        android:translationY="0dp" />
+        android:translationY="0dp"
+        android:visibility="visible" />
 
     <ImageView
-        android:id="@+id/moonImage"
+        android:id="@+id/a_moonImage"
         android:layout_width="413dp"
         android:layout_height="413dp"
         android:layout_gravity="bottom"
@@ -29,31 +30,35 @@
         android:scaleType="centerCrop"
         android:src="@drawable/a_quiz_back3"
         android:translationX="0dp"
-        android:translationY="-230dp" />
+        android:translationY="-230dp"
+        android:visibility="visible" />
 
     <ImageView
-        android:id="@+id/mountainView"
+        android:id="@+id/a_mountainView"
         android:layout_width="510dp"
         android:layout_height="548dp"
         android:scaleType="centerCrop"
         android:translationX="-45dp"
         android:translationY="258dp"
+        android:visibility="visible"
         app:srcCompat="@drawable/a_quiz_back2" />
 
 
     <ImageView
-        android:id="@+id/basicImage2_king_appear"
-        android:layout_width="match_parent"
+        android:id="@+id/a_basicImage2_king_appear"
+        android:layout_width="611dp"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/a_quiz_king2"
-        android:translationX="0dp"
-        android:translationY="0dp" />
+        android:src="@drawable/a_quiz_king"
+        android:translationX="-100dp"
+        android:translationY="-0dp"
+        android:visibility="visible" />
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/a_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:elevation="10dp"
         android:fontFamily="@font/chungjukimsaeng"
         android:gravity="center"
@@ -61,51 +66,49 @@
         android:textAlignment="center"
         android:textColor="#403E3E"
         android:textSize="24sp"
-        android:layout_gravity="center"
         android:translationX="0dp"
-        android:translationY="110dp" />
+        android:translationY="128dp" />
 
     <TextView
-        android:id="@+id/question"
+        android:id="@+id/a_question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/chungjukimsaeng"
         android:letterSpacing="0"
         android:maxLines="1"
-        android:text="가나다라마"
         android:paddingHorizontal="30dp"
-        android:layout_gravity="center"
+        android:text="가나다라마"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="55dp"
-        android:translationY="-30dp"
-        android:translationX="0dp"/>
-
-    <EditText
-        android:id="@+id/answer"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
-        android:background="#14FFFFFF"
-        android:backgroundTint="#E0FFFFFF"
-        android:fontFamily="@font/kimjungchulmyungjoregular"
-        android:gravity="center"
-        android:hint="답을 입력하거라"
-        android:imeOptions="actionDone"
-        android:inputType="text"
-        android:maxLines="1"
-        android:textColor="#D4E3E7"
-        android:textColorHint="@color/white"
-        android:textSize="20sp"
-        android:translationX="70dp"
-        android:translationY="550dp"
-         />
+        android:translationX="0dp"
+        android:translationY="-14dp" />
 
 
-        <!-- 정답 또는 오답 이미지 -->
+    <!-- 정답 또는 오답 이미지 -->
 
     <ImageView
-        android:id="@+id/resultImageView"
+        android:id="@+id/a_king_angry"
+        android:layout_width="135dp"
+        android:layout_height="100dp"
+        android:src="@drawable/a_quiz_angry"
+        android:translationX="138dp"
+        android:translationY="148dp"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/a_king_smile"
+        android:layout_width="596dp"
+        android:layout_height="962dp"
+        android:src="@drawable/a_quiz_smile"
+        android:translationX="-108dp"
+        android:translationY="-376dp"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/a_resultImageView"
         android:layout_width="345dp"
         android:layout_height="80dp"
         android:layout_marginTop="64dp"
@@ -118,39 +121,59 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/resultImageView2"
+        android:id="@+id/a_resultImageView2"
         android:layout_width="220dp"
         android:layout_height="100dp"
+        android:src="@drawable/a_quiz_incorrect23"
         android:translationX="95dp"
-        android:translationY="210dp"
+        android:translationY="226dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.32999998"
-        android:src="@drawable/a_quiz_incorrect23" />
+        app:layout_constraintVertical_bias="0.32999998" />
 
     <FrameLayout
-        android:id="@+id/darkBackground"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:id="@+id/a_darkBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="#80000000"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
+    </FrameLayout>
+
+    <EditText
+        android:id="@+id/a_answer"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="0dp"
+        android:background="#14FFFFFF"
+        android:backgroundTint="#E0FFFFFF"
+        android:fontFamily="@font/kimjungchulmyungjoregular"
+        android:gravity="center"
+        android:hint="답을 입력하거라"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColor="#D4E3E7"
+        android:textColorHint="@color/white"
+        android:textSize="20sp"
+        android:translationX="75dp"
+        android:translationY="550dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
+        android:id="@+id/a_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/countdownText"
+            android:id="@+id/a_countdownText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/chungjukimsaeng"
@@ -167,7 +190,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/number"
+            android:id="@+id/a_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -181,7 +204,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Chronometer
-            android:id="@+id/timer"
+            android:id="@+id/a_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -194,24 +217,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageView
-        android:id="@+id/king_smile"
-        android:layout_width="242dp"
-        android:layout_height="427dp"
-        android:translationX="100dp"
-        android:translationY="-130dp"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/a_quiz_king_smile" />
-
-    <ImageView
-        android:id="@+id/king_angry"
-        android:layout_width="250dp"
-        android:layout_height="427dp"
-        android:translationX="107dp"
-        android:translationY="-128dp"
-        android:visibility="visible"
-        app:srcCompat="@drawable/a_quiz_king_angry" />
 
 
 </FrameLayout>

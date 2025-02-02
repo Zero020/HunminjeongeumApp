@@ -20,7 +20,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.android.hunminjeongeumapp.R
 
 
@@ -63,8 +62,6 @@ class QuizAActivity : AppCompatActivity() {
     var isPaused = false // 타이머 상태 체크
     var timeLeftAtPause: Long = 0 // 타이머가 멈춘 시점
     var startTime: Long = 0
-    val fastFadeIn = AnimationUtils.loadAnimation(this, R.anim.fast_fade_in)
-
 
     //Edit 화면외에 클릭시 키보드 내리기
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -87,22 +84,22 @@ class QuizAActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz_a)
 
-        question = findViewById(R.id.question)
-        description = findViewById(R.id.description)
-        answer = findViewById(R.id.answer)
-        timer = findViewById(R.id.timer)
-        number = findViewById(R.id.number)
-        resultImage = findViewById(R.id.resultImageView) // 결과 이미지
+        question = findViewById(R.id.a_question)
+        description = findViewById(R.id.a_description)
+        answer = findViewById(R.id.a_answer)
+        timer = findViewById(R.id.a_timer)
+        number = findViewById(R.id.a_number)
+        resultImage = findViewById(R.id.a_resultImageView) // 결과 이미지
 
         //효과적인 요소들
-        basicBackground = findViewById(R.id.basicImage)
-        countdownText = findViewById(R.id.countdownText)
-        darkBackground = findViewById(R.id.darkBackground)
-        mountain_appear = findViewById(R.id.mountainView)
-        moon_appear = findViewById(R.id.moonImage)
-        king_angry = findViewById(R.id.king_angry)
-        king_smile = findViewById(R.id.king_smile)
-        resultImage2 = findViewById(R.id.resultImageView2)
+        basicBackground = findViewById(R.id.a_basicImage)
+        countdownText = findViewById(R.id.a_countdownText)
+        darkBackground = findViewById(R.id.a_darkBackground)
+        mountain_appear = findViewById(R.id.a_mountainView)
+        moon_appear = findViewById(R.id.a_moonImage)
+        king_angry = findViewById(R.id.a_king_angry)
+        king_smile = findViewById(R.id.a_king_smile)
+        resultImage2 = findViewById(R.id.a_resultImageView2)//다시푸세요
 
         resultImage2.visibility = ImageView.INVISIBLE
         king_angry.visibility = ImageView.INVISIBLE
@@ -115,10 +112,11 @@ class QuizAActivity : AppCompatActivity() {
         val sunAnimation = AnimationUtils.loadAnimation(this, R.anim.a_sun_appear)
         val slowFadeIn = AnimationUtils.loadAnimation(this, R.anim.slow_fade_in)
 
+        answer.translationY = 566f * resources.displayMetrics.density
 
-        findViewById<View>(R.id.mountainView).startAnimation(mountainAnimation)
-        findViewById<View>(R.id.moonImage).startAnimation(sunAnimation)
-        findViewById<View>(R.id.basicImage2_king_appear).startAnimation(slowFadeIn)
+        findViewById<View>(R.id.a_mountainView).startAnimation(mountainAnimation)
+        findViewById<View>(R.id.a_moonImage).startAnimation(sunAnimation)
+        findViewById<View>(R.id.a_basicImage2_king_appear).startAnimation(slowFadeIn)
 
         setFullScreen()
 
@@ -154,14 +152,13 @@ class QuizAActivity : AppCompatActivity() {
                 // darkBackground를 표시
                 darkBackground.visibility = FrameLayout.VISIBLE
 
-                // EditText를 위로 100dp만큼 올림
-                answer.translationY = -400f * resources.displayMetrics.density
+                answer.translationY = 236f * resources.displayMetrics.density
             } else {
                 // 키보드가 내려가면 darkBackground 숨기기
                 darkBackground.visibility = FrameLayout.GONE
 
                 // EditText 위치 원상복구
-                answer.translationY = 0f
+                answer.translationY = 566f * resources.displayMetrics.density
 
                 // 키보드 숨기기
                 val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -179,6 +176,7 @@ class QuizAActivity : AppCompatActivity() {
                 answer.clearFocus()
 
                 darkBackground.visibility = FrameLayout.GONE
+                answer.translationY = 566f * resources.displayMetrics.density
 
                 checkAnswer()
                 true
@@ -248,23 +246,24 @@ class QuizAActivity : AppCompatActivity() {
             //totalCorrectAnswers++
             showCorrectAnswer()
             answer.text.clear()
-            answer.translationY = 0f
-
         } else {
             // 오답 처리
             showIncorrectAnswer()
             answer.text.clear()
-            answer.translationY = 0f
-
         }
     }
 
     // 정답 처리
     fun showCorrectAnswer() {
+
         resultImage.setImageResource(R.drawable.a_quiz_correct) // 정답 이미지
-        findViewById<View>(R.id.king_smile).startAnimation(fastFadeIn)
+
+        //findViewById<View>(R.id.king_smile).startAnimation(fastFadeIn)
         king_smile.visibility = ImageView.VISIBLE
-        Toast.makeText(this, "정답입니다!", Toast.LENGTH_SHORT).show()
+        val fastFadeIn = AnimationUtils.loadAnimation(this, R.anim.fast_fade_in)
+        king_smile.startAnimation(fastFadeIn)
+
+        Toast.makeText(this, "정답.", Toast.LENGTH_SHORT).show()
 
         totalCorrectAnswers++
         incorrectAttempts = 0
@@ -280,6 +279,7 @@ class QuizAActivity : AppCompatActivity() {
     }
 
     fun moveToNextQuestion() {
+        answer.translationY = 566f * resources.displayMetrics.density
         resultImage.setImageResource(0) // 이미지 초기화
         if (currentQuestionIndex == 0) {
             // 첫 번째 문제에서만 카운트다운을 실행
@@ -288,6 +288,7 @@ class QuizAActivity : AppCompatActivity() {
             // 첫 번째 문제가 아니면 바로 다음 문제를 표시
             if (currentQuestionIndex < 3) {
                 showQuestion()
+                answer.translationY = 566f * resources.displayMetrics.density
             } else {
                 showResult()
             }
@@ -321,7 +322,6 @@ class QuizAActivity : AppCompatActivity() {
                 question.visibility = View.VISIBLE
                 description.visibility = View.VISIBLE
                 countdownText.visibility = TextView.INVISIBLE // 카운트다운 끝나면 텍스트 숨기기
-                //basicBackground.setImageResource(R.drawable.a_quiz_background)
 
                 showQuestion()  // 문제 표시
                 startCountdownTimer()
@@ -332,16 +332,19 @@ class QuizAActivity : AppCompatActivity() {
 
     fun showIncorrectAnswer() {
         resultImage.setImageResource(R.drawable.a_quiz_incorrect1)
-        resultImage2.visibility = ImageView.VISIBLE
         king_angry.visibility = ImageView.VISIBLE
-        findViewById<View>(R.id.king_angry).startAnimation(fastFadeIn)
+        val fastFadeIn = AnimationUtils.loadAnimation(this, R.anim.fast_fade_in)
+        king_angry.startAnimation(fastFadeIn)
 
         incorrectAttempts++
         totalAttempts++
         when (incorrectAttempts) {
             1 -> {
                 question.text = hint1
-                Toast.makeText(this, "첫 번째 힌트", Toast.LENGTH_SHORT).show()
+                resultImage2.visibility = ImageView.VISIBLE
+                resultImage2.startAnimation(fastFadeIn)
+
+                Toast.makeText(this, "첫 번째 힌트를 주마", Toast.LENGTH_SHORT).show()
                 resultImage.postDelayed({
                     resultImage.setImageResource(0)
                     resumeTimer()
@@ -351,7 +354,10 @@ class QuizAActivity : AppCompatActivity() {
             }
             2 -> {
                 question.text = hint2
-                Toast.makeText(this, "두 번째 힌트", Toast.LENGTH_SHORT).show()
+                resultImage2.visibility = ImageView.VISIBLE
+                resultImage2.startAnimation(fastFadeIn)
+
+                Toast.makeText(this, "두 번째 힌트를 주마", Toast.LENGTH_SHORT).show()
                 resultImage.postDelayed({
                     resultImage.setImageResource(0)
                     resumeTimer()
@@ -361,7 +367,7 @@ class QuizAActivity : AppCompatActivity() {
             }
             3 ->  {
                 question.text = correct_answer
-                Toast.makeText(this, "3번째 오답", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "다음문제로 넘어가마", Toast.LENGTH_SHORT).show()
                 currentQuestionIndex++
 
                 if (currentQuestionIndex < 3){

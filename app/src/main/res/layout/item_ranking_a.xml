@@ -11,10 +11,10 @@
 
     <!-- 이름 텍스트 -->
     <TextView
-        android:id="@+id/rankPosition"
+        android:id="@+id/a_rankPosition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="300dp"
+        android:layout_marginStart="315dp"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/chungjukimsaeng"
         android:text="1"
@@ -25,13 +25,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/a_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/kimjungchulmyungjoregular"
+        android:gravity="center"
+        android:maxLines="1"
         android:text="사용자"
+        android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,10 +45,10 @@
     <!-- 괄호 안에 정답률 표시 -->
 
     <TextView
-        android:id="@+id/timeTaken"
+        android:id="@+id/a_timeTaken"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
+        android:layout_marginStart="150dp"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/kimjungchulmyungjobold"
         android:text="100"
@@ -54,7 +57,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/accuracy"
+        android:id="@+id/a_accuracy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -64,7 +67,7 @@
         android:text="(85%)"
         android:textColor="@color/black"
         android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@id/timeTaken"
+        app:layout_constraintStart_toEndOf="@id/a_timeTaken"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

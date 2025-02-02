@@ -1,8 +1,9 @@
 package com.android.hunminjeongeumapp.quiz_a
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -13,12 +14,15 @@ import com.android.hunminjeongeumapp.R
 import android.database.sqlite.SQLiteDatabase
 import android.database.Cursor
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.view.KeyEvent
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText.*
 import android.widget.ImageButton
+import android.widget.ImageView
 import com.android.hunminjeongeumapp.MainActivity
 
 class RankingAActivity : AppCompatActivity() {
@@ -28,22 +32,38 @@ class RankingAActivity : AppCompatActivity() {
 
     lateinit var resultText: TextView // 게임 결과 표시할 텍스트뷰
     lateinit var homeButton: ImageButton
+    lateinit var rankText: ImageView
+    lateinit var paper : ImageView
+    lateinit var rankingking: ImageView
 
     val rankingList = mutableListOf<Rank>()
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz_aranking)
 
         // findViewById로 뷰 연결
-        rankingRecyclerView = findViewById(R.id.rankingList)
-        nameInput = findViewById(R.id.nameInput)
-        resultText = findViewById(R.id.ResultText)
-        homeButton = findViewById(R.id.homeButton)
+        rankingRecyclerView = findViewById(R.id.a_rankingList)
+        nameInput = findViewById(R.id.a_nameInput)
+        resultText = findViewById(R.id.a_ResultText)
+        homeButton = findViewById(R.id.a_homeButton)
+        rankText = findViewById(R.id.a_rankText)
+        paper = findViewById(R.id.a_paperImage)
+        rankingking = findViewById(R.id.a_rankKing)
 
+
+        //애니메이션
+        val basicFadeIn2 = AnimationUtils.loadAnimation(this, R.anim.basic_fade_in2)
+        val basicFadeIn = AnimationUtils.loadAnimation(this, R.anim.basic_fade_in)
+
+        findViewById<View>(R.id.a_ResultText).startAnimation(basicFadeIn2)
+        findViewById<View>(R.id.a_rankKing).startAnimation(basicFadeIn)
+        findViewById<View>(R.id.a_paperImage).startAnimation(basicFadeIn)
 
         // 리사이클러뷰 설정
         rankingRecyclerView.layoutManager = LinearLayoutManager(this)
+        nameInput.translationY = 640f * resources.displayMetrics.density
 
         var receivedTime = intent.getLongExtra("totalTime", 0L)
         var receivedAccuracy = intent.getFloatExtra("accuracy", 0f)
@@ -63,7 +83,8 @@ class RankingAActivity : AppCompatActivity() {
             // 이름 입력 필드 및 버튼 비활성화
             nameInput.isEnabled = false
             nameInput.visibility = EditText.INVISIBLE
-            resultText.text = "참으로 아쉽구나, \n 수고많았느리라"
+            val resultString = "참으로 아쉽구나, \n 또 보자꾸나."
+            animateText(resultString)
 
         }else if(receivedAccuracy == 0f){
             Toast.makeText(this, "정답률 0%로 인해 순위에 등록하지 못하느리라.", Toast.LENGTH_SHORT).show()
@@ -71,16 +92,33 @@ class RankingAActivity : AppCompatActivity() {
             // 이름 입력 필드 및 버튼 비활성화
             nameInput.isEnabled = false
             nameInput.visibility = EditText.INVISIBLE
-            resultText.text = "참으로 아쉽구나, 수고많았느리라"
+            val resultString = "참으로 아쉽구나, \n 또 보자꾸나."
+            animateText(resultString)
 
         } else {
             // 조건을 만족하면 이름 입력 필드 및 버튼 활성화
             nameInput.isEnabled = true
 
             if (minutes != 1) {
-                resultText.text = String.format("%02d초", seconds) + "동안, " +
-                        " ${String.format("%.2f", receivedAccuracy * 100)}%군, \n 수고많았느리라"
+                val resultString = String.format("%02d초", seconds) + "동안, \n" +
+                        " ${String.format("%.2f", receivedAccuracy * 100)}%맞혔구나."
+                animateText(resultString)
 
+            }
+        }
+        // EditText에 포커스가 있을 때 키보드 상태 체크
+        nameInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+
+                nameInput.translationY = 270f * resources.displayMetrics.density
+            } else {
+
+                // EditText 위치 원상복구
+                nameInput.translationY = 640f * resources.displayMetrics.density
+
+                // 키보드 숨기기
+                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(nameInput.windowToken, 0)
             }
         }
 
@@ -97,6 +135,7 @@ class RankingAActivity : AppCompatActivity() {
 
                     // 입력 필드 비활성화
                     nameInput.isEnabled = false
+                    nameInput.translationY = 640f * resources.displayMetrics.density
                 } else {
                     Toast.makeText(this, "이름을 입력하거라", Toast.LENGTH_SHORT).show()
                 }
@@ -106,34 +145,53 @@ class RankingAActivity : AppCompatActivity() {
             }
         }
 
-            homeButton.setOnClickListener {
-                val intent : Intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish() // 현재 액티비티 종료
+        homeButton.setOnClickListener {
+            val intent : Intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish() // 현재 액티비티 종료
+        }
+    }
+
+    private fun animateText(text: String) {
+        resultText.text = "" // 초기 텍스트를 비워둠
+        var index = 0
+        val delay: Long = 150 // 각 글자가 표시되는 시간 간격
+
+        val handler = Handler(Looper.getMainLooper())
+        val runnable = object : Runnable {
+            override fun run() {
+                if (index < text.length) {
+                    resultText.text = resultText.text.toString() + text[index]
+                    index++
+                    handler.postDelayed(this, delay)
+                }
             }
         }
+        handler.post(runnable)
+    }
 
-        // 랭킹 데이터 로드
-        private fun loadRankingData() {
-            val dbManager = QuizADBManager(this, "quizA.db", null, 1)
-            val sqlitedb: SQLiteDatabase = dbManager.readableDatabase
 
-            val cursor: Cursor = sqlitedb.rawQuery("SELECT * FROM rankings ORDER BY time_taken ASC, accuracy DESC LIMIT 5", null)
+    // 랭킹 데이터 로드
+    private fun loadRankingData() {
+        val dbManager = QuizADBManager(this, "quizA.db", null, 1)
+        val sqlitedb: SQLiteDatabase = dbManager.readableDatabase
 
-            rankingList.clear()
-            while (cursor.moveToNext()) {
-                val username = cursor.getString(cursor.getColumnIndex("username"))
-                val timeTaken = cursor.getInt(cursor.getColumnIndex("time_taken"))
-                val accuracy = cursor.getFloat(cursor.getColumnIndex("accuracy"))
-                rankingList.add(Rank(rankingList.size + 1, username, timeTaken, accuracy))
-            }
+        val cursor: Cursor = sqlitedb.rawQuery("SELECT * FROM rankings ORDER BY time_taken ASC, accuracy DESC LIMIT 5", null)
 
-            cursor.close()
-            sqlitedb.close()
-
-            // 어댑터에 랭킹 데이터 적용
-            rankingRecyclerView.adapter = RankingAAdapter(rankingList)
+        rankingList.clear()
+        while (cursor.moveToNext()) {
+            val username = cursor.getString(cursor.getColumnIndex("username"))
+            val timeTaken = cursor.getInt(cursor.getColumnIndex("time_taken"))
+            val accuracy = cursor.getFloat(cursor.getColumnIndex("accuracy"))
+            rankingList.add(Rank(rankingList.size + 1, username, timeTaken, accuracy))
         }
+
+        cursor.close()
+        sqlitedb.close()
+
+        // 어댑터에 랭킹 데이터 적용
+        rankingRecyclerView.adapter = RankingAAdapter(rankingList)
+    }
 
     fun setFullScreen() {
         var uiOption = window.decorView.systemUiVisibility
@@ -145,26 +203,26 @@ class RankingAActivity : AppCompatActivity() {
             uiOption = uiOption or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         window.decorView.systemUiVisibility = uiOption
     }
-        // 게임 결과 저장
-        fun saveGameResult(username: String, accuracy: Float, timeTaken: Int, incorrectWords: String?) {
-            val dbManager = QuizADBManager(this, "quizA.db", null, 1)
-            val sqlitedb = dbManager.writableDatabase
+    // 게임 결과 저장
+    fun saveGameResult(username: String, accuracy: Float, timeTaken: Int, incorrectWords: String?) {
+        val dbManager = QuizADBManager(this, "quizA.db", null, 1)
+        val sqlitedb = dbManager.writableDatabase
 
-            val query = """
+        val query = """
             INSERT INTO rankings (username, accuracy, time_taken, is_registered, incorrect_words)
             VALUES (?, ?, ?, ?, ?)
         """
 
-            // 게임이 정상적으로 종료되었으므로 isRegistered는 true로 설정
-            val isRegistered = true
+        // 게임이 정상적으로 종료되었으므로 isRegistered는 true로 설정
+        val isRegistered = true
 
-            // 게임 결과를 rankings 테이블에 저장
-            sqlitedb.execSQL(query, arrayOf(username, accuracy, timeTaken, isRegistered, incorrectWords))
-            sqlitedb.close()
+        // 게임 결과를 rankings 테이블에 저장
+        sqlitedb.execSQL(query, arrayOf(username, accuracy, timeTaken, isRegistered, incorrectWords))
+        sqlitedb.close()
 
-            // 랭킹 데이터 갱신
-            loadRankingData()
-            nameInput.isEnabled = false
-        }
-
+        // 랭킹 데이터 갱신
+        loadRankingData()
+        nameInput.isEnabled = false
     }
+
+}
