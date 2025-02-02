@@ -48,6 +48,12 @@ class QuizADBManager(
         db.execSQL("INSERT INTO questions (description, question, hint1, hint2, answer) VALUES ('임시로 정한 제목', 'ㄱㅈ', '가ㅈ', '가저', '가제')")
         db.execSQL("INSERT INTO questions (description, question, hint1, hint2, answer) VALUES ('공직자 책임 추궁 절차', 'ㅌㅎ', '타ㅎ', '탄ㅎ', '탄핵')")
         db.execSQL("INSERT INTO questions (description, question, hint1, hint2, answer) VALUES ('나이를 높여 부름', 'ㅇㅅ', '여ㅅ', '연ㅅ', '연세')")
+        db.execSQL("INSERT INTO questions (description, question, hint1, hint2, answer) VALUES ('매우 중요하거나 기본적인 법', 'ㅂㅂ', '본ㅂ', '본법', '본법')")
+        db.execSQL("INSERT INTO questions (description, question, hint1, hint2, answer) VALUES ('상대의 입장을 고려하여 부드럽게 거절', 'ㅇㅂ', '유ㅂ', '유회', '유보')")
+        db.execSQL("INSERT INTO questions (description, question, hint1, hint2, answer) VALUES ('법률에 의거해 처벌할 수 없는 상태', 'ㅁㅊ', '면ㅊ', '면책', '면책')")
+        db.execSQL("INSERT INTO questions (description, question, hint1, hint2, answer) VALUES ('시대를 앞서감', 'ㅅㅈ', '선ㅈ', '선진', '선진')")
+        db.execSQL("INSERT INTO questions (description, question, hint1, hint2, answer) VALUES ('공식적으로 허가를 받음', 'ㅇㄴ', '인ㄴ', '인가', '인가')")
+        db.execSQL("INSERT INTO questions (description, question, hint1, hint2, answer) VALUES ('실수를 바로잡다', 'ㅈㅈ', '정ㅈ', '조ㅈ', '정정')")
 
 
     }

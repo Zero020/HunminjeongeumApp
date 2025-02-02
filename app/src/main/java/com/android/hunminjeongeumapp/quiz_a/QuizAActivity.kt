@@ -5,6 +5,8 @@ import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Rect
+import android.media.MediaPlayer
+import android.media.SoundPool
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -20,6 +22,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.android.hunminjeongeumapp.R
 
 
@@ -27,6 +30,11 @@ class QuizAActivity : AppCompatActivity() {
 
     lateinit var sqlitedb: SQLiteDatabase
     lateinit var dbManager: QuizADBManager
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var soundPool: SoundPool
+    private var soundEffect1: Int = 0
+    private var soundEffect2: Int = 0
+    private var soundEffect3: Int = 0
 
     lateinit var question: TextView
     lateinit var description: TextView
@@ -108,6 +116,17 @@ class QuizAActivity : AppCompatActivity() {
         dbManager = QuizADBManager(this, "quizA.db", null, 1)
         sqlitedb = dbManager.readableDatabase
 
+        mediaPlayer = MediaPlayer.create(this, R.raw.aplay)
+        mediaPlayer.setVolume(0.7f, 0.7f)
+        mediaPlayer.isLooping = true
+        //mediaPlayer.start()
+
+        soundPool = SoundPool.Builder().setMaxStreams(3).build()
+        soundEffect1 = soundPool.load(this, R.raw.acorrect, 1)
+        soundEffect2 = soundPool.load(this, R.raw.aincorrect, 1)
+        soundEffect3 = soundPool.load(this, R.raw.acountdown, 1)
+
+
         val mountainAnimation = AnimationUtils.loadAnimation(this, R.anim.a_mountain_apper)
         val sunAnimation = AnimationUtils.loadAnimation(this, R.anim.a_sun_appear)
         val slowFadeIn = AnimationUtils.loadAnimation(this, R.anim.slow_fade_in)
@@ -174,6 +193,7 @@ class QuizAActivity : AppCompatActivity() {
                 inputMethodManager.hideSoftInputFromWindow(answer.windowToken, 0)
 
                 answer.clearFocus()
+                answer.text.clear()
 
                 darkBackground.visibility = FrameLayout.GONE
                 answer.translationY = 566f * resources.displayMetrics.density
@@ -185,11 +205,20 @@ class QuizAActivity : AppCompatActivity() {
             }
         }
 
-
-
         answer.text.clear() // EditText 초기화
     }
 
+    override fun onPause() {
+        super.onPause()
+        mediaPlayer.pause()  // 액티비티가 일시 중지되면 음악도 일시 중지
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!mediaPlayer.isPlaying) {
+            mediaPlayer.start()  // 액티비티가 다시 시작되면 음악도 재시작
+        }
+    }
 
     fun setFullScreen(){
         var uiOption = window.decorView.systemUiVisibility
@@ -210,11 +239,22 @@ class QuizAActivity : AppCompatActivity() {
                     timeLeftAtPause = millisUntilFinished // 남은 시간 저장
                     val seconds = (millisUntilFinished / 1000).toInt()
                     timer.text = String.format("%02d:%02d", seconds / 60, seconds % 60) // 분:초 형식으로 표시
+
+                    if (seconds == 5) {
+                        // 현재 재생 중인 음악 정지 및 자원 해제
+                        mediaPlayer?.stop()
+                        mediaPlayer?.release()
+                        timer.setTextColor(ContextCompat.getColor(this@QuizAActivity, R.color.red))
+                        // 새 음악 재생
+                        mediaPlayer = MediaPlayer.create(this@QuizAActivity, R.raw.aplayover)
+                        mediaPlayer?.isLooping = true
+                        mediaPlayer?.start()
+                    }
                 }
             }
 
             override fun onFinish() {
-                // 2분이 다 되면 showResult 호출
+                // 1분이 다 되면 showResult 호출
                 showResult()
             }
         }
@@ -243,11 +283,14 @@ class QuizAActivity : AppCompatActivity() {
         pauseTimer()
         if (userAnswer.equals(correct_answer, ignoreCase = true)) {
             // 정답 처리
-            //totalCorrectAnswers++
+            soundPool.play(soundEffect1, 1.0f, 1.0f, 0, 0, 1.0f)
+
             showCorrectAnswer()
             answer.text.clear()
         } else {
             // 오답 처리
+            soundPool.play(soundEffect2, 1.0f, 1.0f, 0, 0, 1.0f)
+
             showIncorrectAnswer()
             answer.text.clear()
         }
@@ -308,12 +351,23 @@ class QuizAActivity : AppCompatActivity() {
 
         val countdownTimer = object : CountDownTimer(4000, 1000) { // 4초간 카운트다운
             override fun onTick(millisUntilFinished: Long) {
+
                 when (countdown) {
                     3 -> countdownText.text = ""
-                    2 -> countdownText.text = "3"
-                    1 -> countdownText.text = "2"
-                    0 -> countdownText.text = "1"
-                }
+                    2 -> {
+                        countdownText.text = "3"
+                        soundPool.play(soundEffect3, 1.0f, 1.0f, 0, 0, 1.0f)
+                    }
+                    1 -> {
+                        countdownText.text = "2"
+                        soundPool.play(soundEffect3, 1.0f, 1.0f, 0, 0, 1.0f)
+                    }
+                    0 -> {
+                        countdownText.text = "1"
+                        mediaPlayer.start()
+                        soundPool.play(soundEffect3, 1.0f, 1.0f, 0, 0, 1.0f)
+                    }
+                    }
                 countdown--
             }
 
@@ -439,6 +493,8 @@ class QuizAActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         countDownTimer.cancel() // 타이머 종료
+        mediaPlayer.release()
+        soundPool.release()
     }
 }
 

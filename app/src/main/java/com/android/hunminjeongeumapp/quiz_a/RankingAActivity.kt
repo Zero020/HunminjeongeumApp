@@ -13,9 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.hunminjeongeumapp.R
 import android.database.sqlite.SQLiteDatabase
 import android.database.Cursor
+import android.media.MediaPlayer
+import android.media.SoundPool
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -37,6 +41,11 @@ class RankingAActivity : AppCompatActivity() {
     lateinit var rankingking: ImageView
 
     val rankingList = mutableListOf<Rank>()
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var soundPool: SoundPool
+    private var soundEffect1: Int = 0
+    private var soundEffect2: Int = 0
+    private var soundEffect3: Int = 0
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +61,15 @@ class RankingAActivity : AppCompatActivity() {
         paper = findViewById(R.id.a_paperImage)
         rankingking = findViewById(R.id.a_rankKing)
 
-
+        mediaPlayer = MediaPlayer.create(this, R.raw.aranking)
+        mediaPlayer.setVolume(0.7f, 0.7f)
+        mediaPlayer.isLooping = true  // 음악을 무한 반복 설정
+        mediaPlayer.start()
+        soundPool = SoundPool.Builder().setMaxStreams(3).build()
+        soundEffect1 = soundPool.load(this, R.raw.ashowlist, 1)
+        soundEffect2 = soundPool.load(this, R.raw.agohome, 1)
+        soundEffect3 = soundPool.load(this, R.raw.akeyboard, 1)
+        
         //애니메이션
         val basicFadeIn2 = AnimationUtils.loadAnimation(this, R.anim.basic_fade_in2)
         val basicFadeIn = AnimationUtils.loadAnimation(this, R.anim.basic_fade_in)
@@ -74,6 +91,11 @@ class RankingAActivity : AppCompatActivity() {
         setFullScreen()
         // 랭킹 DB에서 가져오기
         loadRankingData()
+        soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
+            if (status == 0) {  // 로드 성공 시
+                soundPool.play(soundEffect1, 1.0f, 1.0f, 1, 0, 1.0f)
+            }
+        }
 
         // 조건에 맞지 않으면 이름 입력을 비활성화
         if (receivedTime >= 60) {
@@ -144,10 +166,27 @@ class RankingAActivity : AppCompatActivity() {
                 false
             }
         }
+        nameInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // 텍스트 변경 전
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // 텍스트가 변경될 때 효과음 재생
+                if (count > 0) { // 실제로 새로운 텍스트가 입력되었을 때만 사운드 재생
+                    soundPool.play(soundEffect3, 1.0f, 1.0f, 0, 0, 1.0f)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // 텍스트 변경 후
+            }
+        })
 
         homeButton.setOnClickListener {
             val intent : Intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            soundPool.play(soundEffect2, 1.0f, 1.0f, 0, 0, 1.0f)
             finish() // 현재 액티비티 종료
         }
     }
@@ -170,9 +209,25 @@ class RankingAActivity : AppCompatActivity() {
         handler.post(runnable)
     }
 
+    override fun onPause() {
+        super.onPause()
+        mediaPlayer.pause()  // 액티비티가 일시 중지되면 음악도 일시 중지
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!mediaPlayer.isPlaying) {
+            mediaPlayer.start()  // 액티비티가 다시 시작되면 음악도 재시작
+        }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()  // 액티비티가 종료되면 MediaPlayer 자원 해제
+    }
 
     // 랭킹 데이터 로드
     private fun loadRankingData() {
+
         val dbManager = QuizADBManager(this, "quizA.db", null, 1)
         val sqlitedb: SQLiteDatabase = dbManager.readableDatabase
 
@@ -219,6 +274,7 @@ class RankingAActivity : AppCompatActivity() {
         // 게임 결과를 rankings 테이블에 저장
         sqlitedb.execSQL(query, arrayOf(username, accuracy, timeTaken, isRegistered, incorrectWords))
         sqlitedb.close()
+        soundPool.play(soundEffect3, 1.0f, 1.0f, 0, 0, 1.0f)
 
         // 랭킹 데이터 갱신
         loadRankingData()
