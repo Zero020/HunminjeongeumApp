@@ -2,6 +2,7 @@ package com.android.hunminjeongeumapp
 
 import android.content.ContentValues
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -13,11 +14,18 @@ import com.android.hunminjeongeumapp.quiz_b.QuizBDBManager
 
 class CraftActivity : AppCompatActivity() {
 
+    private var mediaPlayer: MediaPlayer? = null
     private var isChosungGameSelected = true // 초성 놀이 기본 선택
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_craft)
+
+        // 배경 음악 설정
+        mediaPlayer = MediaPlayer.create(this, R.raw.craft_bgm)
+        mediaPlayer?.isLooping = true // 무한 반복 재생
+        mediaPlayer?.setVolume(1.0f, 1.0f) // 좌우 볼륨 50%로 설정
+        mediaPlayer?.start()
 
         // 버튼
         val buttonCraftCGame: Button = findViewById(R.id.button_Craft_C_Game)
@@ -162,6 +170,7 @@ class CraftActivity : AppCompatActivity() {
         buttonToDataList.setOnClickListener {
             val intent = Intent(this, DataListActivity::class.java)
             startActivity(intent)
+
         }
 
     }
@@ -206,6 +215,12 @@ class CraftActivity : AppCompatActivity() {
             editTextCraftC2.visibility = View.INVISIBLE
             editTextCraftC3.visibility = View.INVISIBLE
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer?.release() // 배경음악 해제
+        mediaPlayer = null
     }
 
 }
