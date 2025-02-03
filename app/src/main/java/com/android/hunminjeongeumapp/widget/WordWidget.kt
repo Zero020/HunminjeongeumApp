@@ -93,10 +93,10 @@ class WordWidget : AppWidgetProvider() {
                     val exampleText = wordItem.example ?: "예문 없음"
                     val wordText = wordItem.word ?: "단어 없음"
                     val meaningText = wordItem.senses?.firstOrNull()?.definition ?: "뜻 없음"
-                    val exampleImage = createTextBitmap(exampleText, wordText, context, 700)
-                    val meaningImage = createTextBitmap(meaningText, wordText, context, 700)
-                    //val exampleImage = createTextBitmap(exampleText, wordText, context)
-                    //val meaningImage = createTextBitmap("$wordText: $meaningText", wordText, context)
+                    //val exampleImage = createTextBitmap(exampleText, wordText, context, 40f)
+                    //val meaningImage = createTextBitmap(meaningText, wordText, context, 40f)
+val exampleImage = createTextBitmap(exampleText, wordText, context)
+                    val meaningImage = createTextBitmap("$wordText: $meaningText", wordText, context)
 
                     views.setImageViewBitmap(R.id.tvExample, exampleImage)
                     views.setImageViewBitmap(R.id.tvWordMeaning, meaningImage)
@@ -123,12 +123,16 @@ class WordWidget : AppWidgetProvider() {
         }
 
         @SuppressLint("ResourceAsColor")
-        private fun createTextBitmap(text: String, highlightText: String, context: Context, maxWidth: Int): Bitmap {
+        private fun createTextBitmap(text: String, highlightText: String, context: Context): Bitmap {
             val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
                 color = Color.DKGRAY // 기본 텍스트 색상
-                textSize = 30f
+                textSize = 40f // 고정된 텍스트 크기
                 typeface = Typeface.create(ResourcesCompat.getFont(context, R.font.chungjukimsaeng), Typeface.NORMAL)
             }
+
+            // 이 부분에서 글자 수와 글자 크기를 기반으로 너비를 계산합니다.
+            val charactersPerLine = 20 // 한 줄에 표시할 글자 수
+            val layoutWidth = textPaint.measureText("가".repeat(charactersPerLine)).toInt()
 
             // Create a SpannableString and apply styles
             val spannable = SpannableString(text)
@@ -140,8 +144,8 @@ class WordWidget : AppWidgetProvider() {
                 spannable.setSpan(StyleSpan(Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
 
-            // Create a StaticLayout for the text
-            val layout = StaticLayout.Builder.obtain(spannable, 0, spannable.length, textPaint, maxWidth)
+            // Measure the text to create a layout
+            val layout = StaticLayout.Builder.obtain(spannable, 0, spannable.length, textPaint, layoutWidth)
                 .setAlignment(Layout.Alignment.ALIGN_CENTER)
                 .setLineSpacing(1.0f, 1.0f)
                 .setIncludePad(true)
@@ -154,6 +158,5 @@ class WordWidget : AppWidgetProvider() {
 
             return bitmap
         }
-
     }
 }

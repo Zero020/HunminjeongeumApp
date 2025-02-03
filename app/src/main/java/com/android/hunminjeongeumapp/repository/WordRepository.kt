@@ -6,10 +6,11 @@ import com.android.hunminjeongeumapp.api.ApiClient
 import com.android.hunminjeongeumapp.api.ApiService
 import com.android.hunminjeongeumapp.api.WordItem
 import com.android.hunminjeongeumapp.api.SenseItem
-import com.google.android.gms.common.util.JsonUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.URLEncoder
+import com.android.hunminjeongeumapp.JsonUtils
+
 
 class WordRepository(private val context: Context, private val apiKey: String) {
     private val apiService = ApiClient.retrofit.create(ApiService::class.java)
