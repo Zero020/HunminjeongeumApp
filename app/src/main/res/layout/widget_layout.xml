@@ -1,0 +1,33 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp">
+
+    <ImageView
+        android:id="@+id/tvExample"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:alpha="0.7"
+        android:padding="12dp"
+        android:background="@android:drawable/editbox_background"
+        android:breakStrategy="balanced"
+        android:gravity="center"
+        android:text="예문이 여기에 표시됩니다." />
+
+    <!-- 단어 + 뜻 (기본적으로 숨김) -->
+
+    <ImageView
+        android:id="@+id/tvWordMeaning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:alpha="0.7"
+        android:padding="12dp"
+        android:background="@android:drawable/editbox_background"
+        android:breakStrategy="balanced"
+        android:gravity="center"
+        android:text="단어 + 뜻이 여기에 표시됩니다."
+        android:visibility="gone" />
+</FrameLayout>
