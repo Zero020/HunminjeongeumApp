@@ -2,7 +2,11 @@ package com.android.hunminjeongeumapp.quiz_b
 
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
+import android.media.MediaPlayer
+import android.media.SoundPool
+import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,7 +25,6 @@ class QuizBActivity : AppCompatActivity() {
     private lateinit var king_smile: ImageView
     private lateinit var king_angry: ImageView
 
-
     private lateinit var dbManager: QuizBDBManager
     private lateinit var sqlitedb: SQLiteDatabase
     private var questions = mutableListOf<Question>()
@@ -29,6 +32,12 @@ class QuizBActivity : AppCompatActivity() {
     private var currentAttempts = 0
     private var score = 0
     private var isReattempted = false
+
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var soundPool: SoundPool
+    private var soundEffect1: Int = 0
+    private var soundEffect2: Int = 0
+    private var soundEffect3: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +58,18 @@ class QuizBActivity : AppCompatActivity() {
         king_angry.visibility = ImageView.INVISIBLE
         king_smile.visibility = ImageView.INVISIBLE
 
+        // 배경 음악 설정
+        mediaPlayer = MediaPlayer.create(this, R.raw.aplay)
+        mediaPlayer.setVolume(0.7f, 0.7f)
+        mediaPlayer.isLooping = true
+
+        soundPool = SoundPool.Builder().setMaxStreams(3).build()
+        soundEffect1 = soundPool.load(this, R.raw.acorrect, 1)
+        soundEffect2 = soundPool.load(this, R.raw.aincorrect, 1)
+        soundEffect3 = soundPool.load(this, R.raw.acountdown, 1)
+
+        setFullScreen()
+
         // 데이터베이스 설정 및 문제 가져오기
         dbManager = QuizBDBManager(this, "quizB.db", null, 1)
         sqlitedb = dbManager.readableDatabase
@@ -59,6 +80,22 @@ class QuizBActivity : AppCompatActivity() {
 
         item1Button.setOnClickListener { checkAnswer(0) }
         item2Button.setOnClickListener { checkAnswer(1) }
+
+        // 🚀 페이드인 애니메이션 추가 (1초 후에 UI 요소 표시)
+        val elementsToAnimate = listOf(scoreTextView, questionTextView, item1Button, item2Button)
+        elementsToAnimate.forEach { it.visibility = View.INVISIBLE } // 처음엔 숨김
+
+        // 1초 후에 페이드인 애니메이션 적용
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            val fadeIn = android.view.animation.AlphaAnimation(0f, 1f).apply {
+                duration = 1000  // 1초 동안 서서히 나타남
+                fillAfter = true // 애니메이션 종료 후 상태 유지
+            }
+            elementsToAnimate.forEach {
+                it.visibility = View.VISIBLE
+                it.startAnimation(fadeIn)
+            }
+        }, 1000) // 1초(1000ms) 후 실행
     }
 
     // 데이터베이스에서 문제 로드
@@ -84,6 +121,7 @@ class QuizBActivity : AppCompatActivity() {
             questionTextView.text = currentQuestion.question
             item1Button.text = currentQuestion.item1
             item2Button.text = currentQuestion.item2
+            findViewById<TextView>(R.id.number).text = (currentIndex + 1).toString() // 문제 번호 업데이트
             currentAttempts = 0
             isReattempted = false
         } else {
@@ -95,6 +133,7 @@ class QuizBActivity : AppCompatActivity() {
         }
     }
 
+
     // 사용자의 정답을 확인하고 점수 계산
     private fun checkAnswer(selectedIndex: Int) {
         val correctIndex = questions[currentIndex].answer
@@ -102,9 +141,11 @@ class QuizBActivity : AppCompatActivity() {
         if (selectedIndex == correctIndex) {
             val gainedScore = if (currentAttempts == 0) 10 else 10 / (currentAttempts + 1)
             score += gainedScore
+            soundPool.play(soundEffect1, 1.0f, 1.0f, 0, 0, 1.0f)
             showCorrectAnswer()
 
         } else {
+            soundPool.play(soundEffect2, 1.0f, 1.0f, 0, 0, 1.0f)
             showIncorrectAnswer()
             isReattempted = true
             currentAttempts++
@@ -146,6 +187,29 @@ class QuizBActivity : AppCompatActivity() {
 
         resultImageView2.visibility = ImageView.INVISIBLE
         king_angry.visibility = ImageView.INVISIBLE
+    }
+
+    fun setFullScreen(){
+        var uiOption = window.decorView.systemUiVisibility
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+            uiOption = uiOption or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+            uiOption = uiOption or View.SYSTEM_UI_FLAG_FULLSCREEN
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            uiOption = uiOption or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = uiOption
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mediaPlayer.pause()  // 액티비티가 일시 중지되면 음악도 일시 중지
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!mediaPlayer.isPlaying) {
+            mediaPlayer.start()  // 액티비티가 다시 시작되면 음악도 재시작
+        }
     }
 }
 
