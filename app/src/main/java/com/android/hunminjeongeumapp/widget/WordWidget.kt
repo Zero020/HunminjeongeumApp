@@ -130,28 +130,24 @@ val exampleImage = createTextBitmap(exampleText, wordText, context)
                 typeface = Typeface.create(ResourcesCompat.getFont(context, R.font.chungjukimsaeng), Typeface.NORMAL)
             }
 
-            // 이 부분에서 글자 수와 글자 크기를 기반으로 너비를 계산합니다.
+            // 이 부분에서 글자 수와 글자 크기를 기반으로 너비를 계산
             val charactersPerLine = 20 // 한 줄에 표시할 글자 수
             val layoutWidth = textPaint.measureText("가".repeat(charactersPerLine)).toInt()
 
-            // Create a SpannableString and apply styles
             val spannable = SpannableString(text)
             val start = text.indexOf(highlightText)
             if (start != -1) {
                 val end = start + highlightText.length
-                // Apply color and bold style to the highlighted text
                 spannable.setSpan(ForegroundColorSpan(Color.BLACK), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 spannable.setSpan(StyleSpan(Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
 
-            // Measure the text to create a layout
             val layout = StaticLayout.Builder.obtain(spannable, 0, spannable.length, textPaint, layoutWidth)
                 .setAlignment(Layout.Alignment.ALIGN_CENTER)
                 .setLineSpacing(1.0f, 1.0f)
                 .setIncludePad(true)
                 .build()
 
-            // Create a bitmap from the layout
             val bitmap = Bitmap.createBitmap(layout.width, layout.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
             layout.draw(canvas)
