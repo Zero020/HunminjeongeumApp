@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.media.MediaPlayer
 import android.media.SoundPool
+import android.os.Build
 import com.android.hunminjeongeumapp.MainActivity
 import com.android.hunminjeongeumapp.R
 
@@ -85,6 +86,7 @@ class RankingBActivity : AppCompatActivity() {
             animateText("$receivedScore 점이구나")
         }
 
+        setFullScreen()
         // 랭킹 데이터 로드
         loadRankingData()
 
@@ -201,6 +203,16 @@ class RankingBActivity : AppCompatActivity() {
         rankingRecyclerView.adapter = RankingBAdapter(rankingList)
     }
 
+    fun setFullScreen() {
+        var uiOption = window.decorView.systemUiVisibility
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+            uiOption = uiOption or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+            uiOption = uiOption or View.SYSTEM_UI_FLAG_FULLSCREEN
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            uiOption = uiOption or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = uiOption
+    }
 
     private fun saveGameResult(username: String, score: Int) {
         val dbManager = QuizBDBManager(this, "quizB.db", null, 1)
