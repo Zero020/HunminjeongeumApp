@@ -15,9 +15,22 @@
         android:layout_gravity="fill"
         android:scaleType="centerCrop"
 
-        android:src="@drawable/b_quiz_back1"
+        android:src="@drawable/b_quiz_back2_"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/imageView_charactor"
+        android:layout_width="631dp"
+        android:layout_height="868dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/b_quiz_kingbase" />
 
     <TextView
         android:id="@+id/score"
@@ -48,99 +61,126 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- 이미지뷰 (정답 또는 오답 이미지) -->
+
     <ImageView
         android:id="@+id/b_king_angry"
         android:layout_width="135dp"
         android:layout_height="100dp"
+        android:layout_marginTop="212dp"
         android:src="@drawable/a_quiz_angry"
-        android:translationX="138dp"
-        android:translationY="132dp"
         android:visibility="visible"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintEnd_toEndOf="@+id/imageView_charactor"
+        app:layout_constraintStart_toStartOf="@+id/imageView_charactor"
+        app:layout_constraintTop_toTopOf="@+id/imageView_charactor"
+        tools:ignore="MissingConstraints"
+        tools:visibility="invisible" />
 
     <ImageView
         android:id="@+id/b_king_smile"
-        android:layout_width="596dp"
-        android:layout_height="962dp"
+        android:layout_width="617dp"
+        android:layout_height="897dp"
+        android:layout_marginStart="-10dp"
+        android:layout_marginBottom="255dp"
         android:src="@drawable/a_quiz_smile"
-        android:translationX="-105dp"
-        android:translationY="-392dp"
         android:visibility="visible"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="-105dp"
-        tools:layout_editor_absoluteY="-393dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/imageView_charactor"
+        app:layout_constraintStart_toStartOf="@+id/imageView_charactor"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/b_resultImageView"
-        android:layout_width="345dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="64dp"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="180dp"
         android:scaleType="centerInside"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.647"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/imageView_charactor" />
 
     <ImageView
         android:id="@+id/b_resultImageView2"
         android:layout_width="220dp"
         android:layout_height="100dp"
+        android:layout_marginTop="60dp"
         android:src="@drawable/b_quiz_incorrect4"
         android:translationY="47dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.522"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.32999998" />
+        app:layout_constraintTop_toTopOf="@+id/imageView_charactor" />
+
+    <ImageView
+        android:id="@+id/imageView_questionBack"
+        android:layout_width="321dp"
+        android:layout_height="141dp"
+        app:layout_constraintBottom_toBottomOf="@+id/question"
+        app:layout_constraintEnd_toEndOf="@+id/question"
+        app:layout_constraintStart_toStartOf="@+id/question"
+        app:layout_constraintTop_toTopOf="@+id/question"
+        app:srcCompat="@drawable/b_quiz_button" />
 
     <TextView
         android:id="@+id/question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="360dp"
         android:fontFamily="@font/chungjukimsaeng"
+        android:gravity="center_horizontal"
         android:src="@drawable/b_quiz_question"
         android:text="문제 단어"
-        android:gravity="center_horizontal"
         android:textColor="@color/black"
         android:textSize="64sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/imageView_selectbox1"
+        android:layout_width="155dp"
+        android:layout_height="60dp"
+        app:layout_constraintStart_toStartOf="@+id/item1"
+        app:layout_constraintTop_toTopOf="@+id/item1"
+        app:srcCompat="@drawable/b_quiz_selectbox" />
+
     <Button
         android:id="@+id/item1"
         android:layout_width="153dp"
         android:layout_height="55dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="90dp"
+        android:background="@android:color/transparent"
         android:fontFamily="@font/kimjungchulgothiclegular"
         android:text="보기 1"
-        android:textSize="24sp"
         android:textColor="@color/black"
-        android:background="@android:color/transparent"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/item2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.48"
-        app:layout_constraintTop_toBottomOf="@id/question"/>
+        app:layout_constraintTop_toBottomOf="@id/question"
+        app:layout_constraintWidth_percent="0.48" />
+
+    <ImageView
+        android:id="@+id/imageView_selectbox2"
+        android:layout_width="155dp"
+        android:layout_height="60dp"
+        app:layout_constraintStart_toStartOf="@+id/item2"
+        app:layout_constraintTop_toTopOf="@+id/item2"
+        app:srcCompat="@drawable/b_quiz_selectbox" />
 
     <Button
         android:id="@+id/item2"
         android:layout_width="153dp"
         android:layout_height="55dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="75dp"
+        android:background="@android:color/transparent"
         android:fontFamily="@font/kimjungchulgothiclegular"
         android:text="보기 2"
-        android:textSize="24sp"
         android:textColor="@color/black"
-        android:background="@android:color/transparent"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/item1"
-        app:layout_constraintWidth_percent="0.48"
-        app:layout_constraintTop_toBottomOf="@id/question"
-        />
+        app:layout_constraintTop_toTopOf="@+id/item1"
+        app:layout_constraintWidth_percent="0.48" />
 
     <FrameLayout
         android:id="@+id/darkBackground"
@@ -152,5 +192,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/kimjungchulmyungjoregular"
+        android:text="유의어로 알맞은 단어는?"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/item1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_questionBack" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
