@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.android.hunminjeongeumapp.quiz_a.QuizAActivity
 import com.android.hunminjeongeumapp.quiz_b.QuizBActivity
+import com.android.hunminjeongeumapp.widget.UpdateWidgetWorker
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        UpdateWidgetWorker.scheduleUpdate(this)
 
         // 🎵 배경 음악 설정
         mediaPlayer = MediaPlayer.create(this, R.raw.main_bgm)
