@@ -64,8 +64,8 @@
         android:gravity="center"
         android:text="한줄로 된 설명"
         android:textAlignment="center"
-        android:textColor="#403E3E"
-        android:textSize="24sp"
+        android:textColor="#6A6868"
+        android:textSize="20sp"
         android:translationX="0dp"
         android:translationY="128dp" />
 
