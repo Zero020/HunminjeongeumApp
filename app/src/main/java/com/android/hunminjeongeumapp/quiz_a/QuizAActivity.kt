@@ -185,25 +185,25 @@ class QuizAActivity : AppCompatActivity() {
             }
         }
 
-        // 엔터키 누를 때 정답 비교
+        // answer.text.clear()를 checkAnswer() 실행 이후에 실행하도록 변경
         answer.setOnEditorActionListener { _, action, _ ->
             if (action == EditorInfo.IME_ACTION_DONE) {
-                // 엔터 키 -> 키보드 내리기
                 val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(answer.windowToken, 0)
 
                 answer.clearFocus()
-                answer.text.clear()
-
                 darkBackground.visibility = FrameLayout.GONE
                 answer.translationY = 566f * resources.displayMetrics.density
 
                 checkAnswer()
+
+                answer.text.clear()  // ✅ 정답을 확인한 후에 텍스트를 지우도록 변경
                 true
             } else {
                 false
             }
         }
+
 
         answer.text.clear() // EditText 초기화
     }
@@ -480,7 +480,7 @@ class QuizAActivity : AppCompatActivity() {
         // 총 걸린 시간 계산: SystemClock.elapsedRealtime()을 사용하여 경과 시간 계산
         val totalTime = (SystemClock.elapsedRealtime() - startTime) / 1000
         // 평균 정답률 계산
-        val accuracy = if (totalAttempts > 0) totalCorrectAnswers.toFloat() / totalAttempts else 0f
+        val accuracy = if (questionsList.isNotEmpty()) totalCorrectAnswers.toFloat() / questionsList.size else 0f
 
         // 결과 화면으로 이동
         val intent: Intent = Intent(this, RankingAActivity::class.java)
