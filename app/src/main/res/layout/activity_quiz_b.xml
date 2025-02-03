@@ -5,19 +5,31 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#97C1D1"
     android:orientation="horizontal"
-    android:padding="16dp"
     tools:context=".quiz_a.QuizAActivity">
+
+    <ImageView
+        android:id="@+id/b_basicImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="fill"
+        android:scaleType="centerCrop"
+
+        android:src="@drawable/b_quiz_back1"
+        android:visibility="visible"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
+        android:fontFamily="@font/kimjungchulgothiclegular"
         android:text="0"
-        android:textSize="24sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/white"
+        android:textSize="22dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,72 +39,108 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
+        android:fontFamily="@font/kimjungchulgothiclegular"
         android:text="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/white"
+        android:textSize="22dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- 이미지뷰 (정답 또는 오답 이미지) -->
     <ImageView
-        android:id="@+id/resultImageView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/question"
+        android:id="@+id/b_king_angry"
+        android:layout_width="135dp"
+        android:layout_height="100dp"
+        android:src="@drawable/a_quiz_angry"
+        android:translationX="138dp"
+        android:translationY="132dp"
+        android:visibility="visible"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/b_king_smile"
+        android:layout_width="596dp"
+        android:layout_height="962dp"
+        android:src="@drawable/a_quiz_smile"
+        android:translationX="-105dp"
+        android:translationY="-392dp"
+        android:visibility="visible"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="-105dp"
+        tools:layout_editor_absoluteY="-393dp" />
+
+    <ImageView
+        android:id="@+id/b_resultImageView"
+        android:layout_width="345dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="64dp"
+        android:scaleType="centerInside"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintHorizontal_bias="0.647"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/b_resultImageView2"
+        android:layout_width="220dp"
+        android:layout_height="100dp"
+        android:src="@drawable/b_quiz_incorrect4"
+        android:translationY="47dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.522"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.32999998" />
 
     <TextView
         android:id="@+id/question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
-        android:background="#FFFFFF"
-        android:paddingHorizontal="30dp"
+        android:layout_marginTop="300dp"
+        android:fontFamily="@font/chungjukimsaeng"
+        android:src="@drawable/b_quiz_question"
         android:text="문제 단어"
-        android:textSize="48sp"
+        android:gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:textSize="64sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="유의어로 알맞은 것은?"
-        android:textSize="28dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/question"/>
-
     <Button
         android:id="@+id/item1"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="153dp"
+        android:layout_height="55dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="75dp"
+        android:fontFamily="@font/kimjungchulgothiclegular"
         android:text="보기 1"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:background="@android:color/transparent"
         app:layout_constraintEnd_toStartOf="@+id/item2"
-        app:layout_constraintTop_toBottomOf="@+id/description"
-        app:layout_constraintWidth_percent="0.48"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.48"
+        app:layout_constraintTop_toBottomOf="@id/question"/>
 
     <Button
         android:id="@+id/item2"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="153dp"
+        android:layout_height="55dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="75dp"
+        android:fontFamily="@font/kimjungchulgothiclegular"
         android:text="보기 2"
-        android:textSize="30sp"
-        app:layout_constraintStart_toEndOf="@+id/item1"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description"
-        app:layout_constraintWidth_percent="0.48"/>
-
+        app:layout_constraintStart_toEndOf="@+id/item1"
+        app:layout_constraintWidth_percent="0.48"
+        app:layout_constraintTop_toBottomOf="@id/question"
+        />
 
     <FrameLayout
         android:id="@+id/darkBackground"
