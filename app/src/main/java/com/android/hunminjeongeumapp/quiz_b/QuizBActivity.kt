@@ -3,10 +3,10 @@ package com.android.hunminjeongeumapp.quiz_b
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.hunminjeongeumapp.R
 
@@ -17,6 +17,10 @@ class QuizBActivity : AppCompatActivity() {
     private lateinit var item1Button: Button
     private lateinit var item2Button: Button
     private lateinit var resultImageView: ImageView
+    private lateinit var resultImageView2: ImageView
+    private lateinit var king_smile: ImageView
+    private lateinit var king_angry: ImageView
+
 
     private lateinit var dbManager: QuizBDBManager
     private lateinit var sqlitedb: SQLiteDatabase
@@ -35,7 +39,15 @@ class QuizBActivity : AppCompatActivity() {
         questionTextView = findViewById(R.id.question)
         item1Button = findViewById(R.id.item1)
         item2Button = findViewById(R.id.item2)
-        resultImageView = findViewById(R.id.resultImageView)
+        resultImageView = findViewById(R.id.b_resultImageView)
+
+        king_angry = findViewById(R.id.b_king_angry)
+        king_smile = findViewById(R.id.b_king_smile)
+        resultImageView2 = findViewById(R.id.b_resultImageView2)//다시푸세요
+
+        resultImageView2.visibility = ImageView.INVISIBLE
+        king_angry.visibility = ImageView.INVISIBLE
+        king_smile.visibility = ImageView.INVISIBLE
 
         // 데이터베이스 설정 및 문제 가져오기
         dbManager = QuizBDBManager(this, "quizB.db", null, 1)
@@ -88,19 +100,55 @@ class QuizBActivity : AppCompatActivity() {
         val correctIndex = questions[currentIndex].answer
 
         if (selectedIndex == correctIndex) {
-            Toast.makeText(this, "정답", Toast.LENGTH_SHORT).show()
             val gainedScore = if (currentAttempts == 0) 10 else 10 / (currentAttempts + 1)
             score += gainedScore
-            scoreTextView.text = score.toString()
-            currentIndex++ // 다음 문제로 이동
-            loadQuestion()
+            showCorrectAnswer()
+
         } else {
-            Toast.makeText(this, "오답", Toast.LENGTH_SHORT).show()
+            showIncorrectAnswer()
             isReattempted = true
             currentAttempts++
         }
     }
+
+    // 정답 처리
+    fun showCorrectAnswer() {
+
+        resultImageView.setImageResource(R.drawable.b_quiz_correct) // 정답 이미지
+
+        //findViewById<View>(R.id.king_smile).startAnimation(fastFadeIn)
+        king_smile.visibility = ImageView.VISIBLE
+        val fastFadeIn = AnimationUtils.loadAnimation(this, R.anim.fast_fade_in)
+        king_smile.startAnimation(fastFadeIn)
+
+        scoreTextView.text = score.toString()
+        currentIndex++ // 다음 문제로 이동
+
+        //pauseTimer()
+
+        resultImageView.postDelayed({
+            resultImageView.setImageResource(0) // 이미지 초기화
+            king_smile.visibility = ImageView.INVISIBLE
+            loadQuestion()
+        }, 2000)
+
+    }
+
+    // 오답처리
+    fun showIncorrectAnswer() {
+        resultImageView.setImageResource(R.drawable.b_quiz_incorrect)
+        king_angry.visibility = ImageView.VISIBLE
+        val fastFadeIn = AnimationUtils.loadAnimation(this, R.anim.fast_fade_in)
+        king_angry.startAnimation(fastFadeIn)
+
+        resultImageView2.visibility = ImageView.VISIBLE
+        resultImageView2.startAnimation(fastFadeIn)
+
+        resultImageView2.visibility = ImageView.INVISIBLE
+        king_angry.visibility = ImageView.INVISIBLE
+    }
 }
+
 
 data class Question(
     val question: String,
