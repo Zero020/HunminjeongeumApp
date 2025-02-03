@@ -2,7 +2,9 @@ package com.android.hunminjeongeumapp
 
 import android.content.ContentValues
 import android.content.Intent
+import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.media.SoundPool
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -17,6 +19,12 @@ class CraftActivity : AppCompatActivity() {
     private var mediaPlayer: MediaPlayer? = null
     private var isChosungGameSelected = true // 초성 놀이 기본 선택
 
+    private lateinit var soundPool: SoundPool
+    private var cEffect = 0
+    private var uEffect = 0
+    private var backButtonEffect = 0
+    private var registButtonEffect = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_craft)
@@ -26,6 +34,24 @@ class CraftActivity : AppCompatActivity() {
         mediaPlayer?.isLooping = true // 무한 반복 재생
         mediaPlayer?.setVolume(1.0f, 1.0f) // 좌우 볼륨 50%로 설정
         mediaPlayer?.start()
+
+
+        // 🎵 SoundPool 초기화
+        soundPool = SoundPool.Builder()
+            .setMaxStreams(4) // 최대 동시 재생 개수
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_GAME)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build()
+            )
+            .build()
+
+        // 🎵 효과음 로드
+        cEffect = soundPool.load(this, R.raw.craft_c_game2, 1)
+        uEffect = soundPool.load(this, R.raw.craft_u_game2, 1)
+        backButtonEffect = soundPool.load(this, R.raw.craft_back2, 1)
+        registButtonEffect = soundPool.load(this, R.raw.craft_regist2, 1)
 
         // 버튼
         val buttonCraftCGame: Button = findViewById(R.id.button_Craft_C_Game)
@@ -61,6 +87,7 @@ class CraftActivity : AppCompatActivity() {
 
         // 초성 놀이 버튼 클릭 이벤트
         buttonCraftCGame.setOnClickListener {
+            soundPool.play(cEffect, 1.0f, 1.0f, 0, 0, 1.0f) // 🎵 초성 놀이 효과음 재생
             isChosungGameSelected = true
 
             buttonCraftCGame.alpha = 1.0f
@@ -77,6 +104,7 @@ class CraftActivity : AppCompatActivity() {
 
         // 유의어 놀이 버튼 클릭 이벤트
         buttonCraftUGame.setOnClickListener {
+            soundPool.play(uEffect, 1.0f, 1.0f, 0, 0, 1.0f) // 🎵 유의어 놀이 효과음 재생
             isChosungGameSelected = false
 
             buttonCraftUGame.alpha = 1.0f
@@ -93,6 +121,7 @@ class CraftActivity : AppCompatActivity() {
 
         // 데이터 저장 버튼 클릭 이벤트
         buttonCraftApply.setOnClickListener {
+            soundPool.play(registButtonEffect, 1.0f, 1.0f, 0, 0, 1.0f) // 🎵 데이터 저장 효과음 재생
             if (isChosungGameSelected) {
                 // 초성 놀이 데이터 저장
                 val questionText = editTextCraftC1.text.toString().trim()
@@ -158,6 +187,7 @@ class CraftActivity : AppCompatActivity() {
 
         // 메인 화면으로 이동
         buttonCraftToMain.setOnClickListener {
+            soundPool.play(backButtonEffect, 1.0f, 1.0f, 0, 0, 1.0f) // 🎵 메인으로 가기 효과음 재생
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
@@ -219,6 +249,7 @@ class CraftActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        soundPool.release() // 🎵 SoundPool 해제
         mediaPlayer?.release() // 배경음악 해제
         mediaPlayer = null
     }

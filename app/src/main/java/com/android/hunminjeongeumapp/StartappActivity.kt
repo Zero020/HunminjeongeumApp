@@ -30,8 +30,8 @@ class StartappActivity : AppCompatActivity() {
 
     private fun playButtonSoundAndGoToMain() {
         // 효과음 재생
-        soundEffect = MediaPlayer.create(this, R.raw.startapp_buttonsound)
-        soundEffect?.setVolume(100.0f, 100.0f) // 볼륨 설정
+        soundEffect = MediaPlayer.create(this, R.raw.startapp_buttonsound2)
+        soundEffect?.setVolume(1.0f, 1.0f) // 볼륨 설정
         soundEffect?.setOnCompletionListener {
             // 효과음이 끝난 후 MainActivity로 이동
             val intent = Intent(this, MainActivity::class.java)
