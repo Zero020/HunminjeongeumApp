@@ -5,8 +5,8 @@ import android.util.Log
 import com.android.hunminjeongeumapp.api.ApiClient
 import com.android.hunminjeongeumapp.api.ApiService
 import com.android.hunminjeongeumapp.api.WordItem
-import com.android.hunminjeongeumapp.JsonUtils
 import com.android.hunminjeongeumapp.api.SenseItem
+import com.google.android.gms.common.util.JsonUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.URLEncoder
