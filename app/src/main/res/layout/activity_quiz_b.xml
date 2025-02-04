@@ -8,6 +8,18 @@
     android:orientation="horizontal"
     tools:context=".quiz_a.QuizAActivity">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationX="-5px"
+            app:srcCompat="@drawable/b_quiz_back4" />
+    </FrameLayout>
+
     <ImageView
         android:id="@+id/b_basicImage"
         android:layout_width="match_parent"
