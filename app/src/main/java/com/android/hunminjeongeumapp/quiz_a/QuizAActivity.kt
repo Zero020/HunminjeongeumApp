@@ -197,7 +197,7 @@ class QuizAActivity : AppCompatActivity() {
 
                 checkAnswer()
 
-                answer.text.clear()  // ✅ 정답을 확인한 후에 텍스트를 지우도록 변경
+                answer.text.clear()  //정답을 확인한 후에 텍스트를 지우도록 변경
                 true
             } else {
                 false
@@ -276,8 +276,8 @@ class QuizAActivity : AppCompatActivity() {
         incorrectAttempts = 0 // 각 문제마다 틀린 횟수 초기화
     }
 
+    //정답여부
     fun checkAnswer() {
-
         val userAnswer = answer.text.toString().trim()
         totalAttempts++
         pauseTimer()
@@ -321,6 +321,7 @@ class QuizAActivity : AppCompatActivity() {
 
     }
 
+    //다음문제 이동
     fun moveToNextQuestion() {
         answer.translationY = 566f * resources.displayMetrics.density
         resultImage.setImageResource(0) // 이미지 초기화
