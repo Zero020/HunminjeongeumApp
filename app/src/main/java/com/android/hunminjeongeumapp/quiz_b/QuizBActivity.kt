@@ -123,10 +123,11 @@ class QuizBActivity : AppCompatActivity() {
             item1Button.text = currentQuestion.item1
             item2Button.text = currentQuestion.item2
             findViewById<TextView>(R.id.number).text = (currentIndex + 1).toString() // 문제 번호 업데이트
-            currentAttempts = 0
-            isReattempted = false
+
+            currentAttempts = 0  //  현재 문제 시작 시 다시 0으로 초기화
+            isReattempted = false //  재시도 여부도 초기화
+
         } else {
-            // 모든 문제를 다 풀었을 경우 랭킹 화면으로 이동
             val intent = Intent(this, RankingBActivity::class.java)
             intent.putExtra("score", score)
             startActivity(intent)
@@ -135,23 +136,26 @@ class QuizBActivity : AppCompatActivity() {
     }
 
 
+
     // 사용자의 정답을 확인하고 점수 계산
     private fun checkAnswer(selectedIndex: Int) {
         val correctIndex = questions[currentIndex].answer
 
         if (selectedIndex == correctIndex) {
-            val gainedScore = if (currentAttempts == 0) 10 else 10 / (currentAttempts + 1)
-            score += gainedScore
+            val gainedScore = if (currentAttempts == 0) 10 else (10.0 / (currentAttempts + 1)).toInt()
+            score += gainedScore  // ⬅ 점수 반영
             soundPool.play(soundEffect1, 1.0f, 1.0f, 0, 0, 1.0f)
             showCorrectAnswer()
-
         } else {
             soundPool.play(soundEffect2, 1.0f, 1.0f, 0, 0, 1.0f)
+            score -= 1  // ⬅ 틀릴 때 점수 감소 (예: 1점씩 깎음)
             showIncorrectAnswer()
             isReattempted = true
-            currentAttempts++
+            currentAttempts++  // ⬅ 틀린 횟수 증가
         }
     }
+
+
 
     // 정답 처리
     fun showCorrectAnswer() {
