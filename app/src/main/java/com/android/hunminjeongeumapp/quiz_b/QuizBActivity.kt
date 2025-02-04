@@ -82,7 +82,7 @@ class QuizBActivity : AppCompatActivity() {
         item1Button.setOnClickListener { checkAnswer(0) }
         item2Button.setOnClickListener { checkAnswer(1) }
 
-        // 🚀 페이드인 애니메이션 추가 (1초 후에 UI 요소 표시)
+        // 페이드인 애니메이션 추가 (1초 후에 UI 요소 표시)
         val elementsToAnimate = listOf(scoreTextView, questionTextView, item1Button, item2Button)
         elementsToAnimate.forEach { it.visibility = View.INVISIBLE } // 처음엔 숨김
 

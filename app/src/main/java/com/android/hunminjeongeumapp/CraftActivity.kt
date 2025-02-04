@@ -36,7 +36,7 @@ class CraftActivity : AppCompatActivity() {
         mediaPlayer?.start()
 
 
-        // 🎵 SoundPool 초기화
+        // SoundPool 초기화
         soundPool = SoundPool.Builder()
             .setMaxStreams(4) // 최대 동시 재생 개수
             .setAudioAttributes(
@@ -47,7 +47,7 @@ class CraftActivity : AppCompatActivity() {
             )
             .build()
 
-        // 🎵 효과음 로드
+        // 효과음 로드
         cEffect = soundPool.load(this, R.raw.craft_c_game2, 1)
         uEffect = soundPool.load(this, R.raw.craft_u_game2, 1)
         backButtonEffect = soundPool.load(this, R.raw.craft_back2, 1)
@@ -79,7 +79,7 @@ class CraftActivity : AppCompatActivity() {
         buttonCraftCGame.alpha = 1.0f // 기본 선택
         buttonCraftUGame.alpha = 0.6f
 
-        // ✅ 초성 놀이 UI를 보이게 설정 (처음 실행 시)
+        // 초성 놀이 UI를 보이게 설정 (처음 실행 시)
         setVisibilityForGameType(true, textViewCraftC1, textViewCraftC2, textViewCraftC3,
             editTextCraftC1, editTextCraftC2, editTextCraftC3,
             textViewCraftU1, textViewCraftU2, textViewCraftU3,
@@ -249,7 +249,7 @@ class CraftActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        soundPool.release() // 🎵 SoundPool 해제
+        soundPool.release() // SoundPool 해제
         mediaPlayer?.release() // 배경음악 해제
         mediaPlayer = null
     }

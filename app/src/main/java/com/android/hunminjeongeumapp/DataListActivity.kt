@@ -64,7 +64,7 @@ class DataListActivity : AppCompatActivity() {
         }
     }
 
-    // ✅ 버튼 투명도 조절 함수
+    // 버튼 투명도 조절 함수
     private fun updateButtonTransparency(buttonChosung: Button, buttonSynonym: Button) {
         if (isChosungSelected) {
             buttonChosung.alpha = 1.0f // 선택된 버튼: 불투명
@@ -75,7 +75,7 @@ class DataListActivity : AppCompatActivity() {
         }
     }
 
-    // ✅ 초성 놀이 데이터 로드 (모든 컬럼 포함)
+    // 초성 놀이 데이터 로드 (모든 컬럼 포함)
     private fun loadChosungData() {
         dataList.clear()
         val dbManager = QuizADBManager(this, "quizA.db", null, 1)
@@ -88,7 +88,7 @@ class DataListActivity : AppCompatActivity() {
             val answer = cursor.getString(cursor.getColumnIndexOrThrow("answer"))
             val description = cursor.getString(cursor.getColumnIndexOrThrow("description"))
             val hint1 = cursor.getString(cursor.getColumnIndexOrThrow("hint1"))
-            val hint2 = cursor.getString(cursor.getColumnIndexOrThrow("hint2")) // ✅ hint2 추가
+            val hint2 = cursor.getString(cursor.getColumnIndexOrThrow("hint2")) // hint2 추가
 
             dataList.add(DataItem(id, question, answer, description, hint1, hint2))
         }
@@ -98,7 +98,7 @@ class DataListActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    // ✅ 유의어 놀이 데이터 로드 (모든 컬럼 포함)
+    // 유의어 놀이 데이터 로드 (모든 컬럼 포함)
     private fun loadSynonymData() {
         dataList.clear()
         val dbManager = QuizBDBManager(this, "quizB.db", null, 1)
@@ -119,7 +119,7 @@ class DataListActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    // ✅ 선택된 데이터 삭제
+    // 선택된 데이터 삭제
     private fun deleteSelectedItems() {
         val selectedItems = adapter.getSelectedItems()
 

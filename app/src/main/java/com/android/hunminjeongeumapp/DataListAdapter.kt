@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 class DataListAdapter(private val itemList: MutableList<DataItem>) :
     RecyclerView.Adapter<DataListAdapter.ViewHolder>() {
 
-    private val selectedItems = mutableSetOf<DataItem>() // ✅ Set으로 변경하여 중복 방지
+    private val selectedItems = mutableSetOf<DataItem>() // Set으로 변경하여 중복 방지
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textQuestion: TextView = view.findViewById(R.id.text_question)
@@ -34,10 +34,10 @@ class DataListAdapter(private val itemList: MutableList<DataItem>) :
                 textExtra3.text = "" // 유의어 놀이엔 힌트2가 없으므로 빈값
             }
 
-            // ✅ 체크박스 상태 설정
+            // 체크박스 상태 설정
             checkBox.isChecked = selectedItems.contains(item)
 
-            // ✅ 체크박스 선택/해제 이벤트 리스너
+            // 체크박스 선택/해제 이벤트 리스너
             checkBox.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) selectedItems.add(item) else selectedItems.remove(item)
             }
@@ -55,5 +55,5 @@ class DataListAdapter(private val itemList: MutableList<DataItem>) :
 
     override fun getItemCount(): Int = itemList.size
 
-    fun getSelectedItems(): List<DataItem> = selectedItems.toList() // ✅ 선택된 항목 반환
+    fun getSelectedItems(): List<DataItem> = selectedItems.toList() // 선택된 항목 반환
 }

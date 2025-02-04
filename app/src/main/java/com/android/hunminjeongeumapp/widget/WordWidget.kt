@@ -26,7 +26,7 @@ import android.text.TextPaint
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import androidx.core.content.res.ResourcesCompat
-
+//위젯 구성
 class WordWidget : AppWidgetProvider() {
 
     override fun onUpdate(
@@ -55,7 +55,7 @@ class WordWidget : AppWidgetProvider() {
             }
 
             val toggleIntent = Intent(context, WordWidget::class.java).apply {
-                action = "ACTION_TOGGLE_VIEW"
+                action = "ACTION_TOGGLE_VIEW" //토글 형식으로 진행
                 putExtra("showExample", newState)
             }
             val pendingIntent = PendingIntent.getBroadcast(
@@ -93,9 +93,7 @@ class WordWidget : AppWidgetProvider() {
                     val exampleText = wordItem.example ?: "예문 없음"
                     val wordText = wordItem.word ?: "단어 없음"
                     val meaningText = wordItem.senses?.firstOrNull()?.definition ?: "뜻 없음"
-                    //val exampleImage = createTextBitmap(exampleText, wordText, context, 40f)
-                    //val meaningImage = createTextBitmap(meaningText, wordText, context, 40f)
-val exampleImage = createTextBitmap(exampleText, wordText, context)
+                    val exampleImage = createTextBitmap(exampleText, wordText, context)
                     val meaningImage = createTextBitmap("$wordText: $meaningText", wordText, context)
 
                     views.setImageViewBitmap(R.id.tvExample, exampleImage)

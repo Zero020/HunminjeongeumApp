@@ -25,13 +25,13 @@ class MainActivity : AppCompatActivity() {
 
         UpdateWidgetWorker.scheduleUpdate(this)
 
-        // 🎵 배경 음악 설정
+        // 배경 음악 설정
         mediaPlayer = MediaPlayer.create(this, R.raw.main_bgm)
         mediaPlayer?.isLooping = true // 무한 반복 재생
         mediaPlayer?.setVolume(1.0f, 1.0f) // 배경음악 볼륨 조정 (효과음과 밸런스 조정)
         mediaPlayer?.start()
 
-        // 🎧 효과음 설정 (SoundPool)
+        // 효과음 설정 (SoundPool)
         val audioAttributes = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_GAME)
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -87,14 +87,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // 🎵 A 효과음 (버튼 클릭 후 이동)
+    // A 효과음 (버튼 클릭 후 이동)
     private fun playSoundEffectA(onComplete: () -> Unit) {
         soundPool.play(soundEffectA, 1.0f, 1.0f, 1, 0, 1.0f)
         val soundDurationMs = 500L // 효과음 지속 시간
         findViewById<Button>(R.id.button_to_C_Game).postDelayed({ onComplete() }, soundDurationMs)
     }
 
-    // 🎵 B 효과음 (힌트 버튼 클릭 시)
+    // B 효과음 (힌트 버튼 클릭 시)
     private fun playSoundEffectB() {
         soundPool.play(soundEffectB, 1.0f, 1.0f, 1, 0, 1.0f)
     }
