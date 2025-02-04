@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.android.hunminjeongeumapp.R
+import kotlinx.coroutines.*
 
 class QuizBActivity : AppCompatActivity() {
 
@@ -185,8 +186,14 @@ class QuizBActivity : AppCompatActivity() {
         resultImageView2.visibility = ImageView.VISIBLE
         resultImageView2.startAnimation(fastFadeIn)
 
-        resultImageView2.visibility = ImageView.INVISIBLE
-        king_angry.visibility = ImageView.INVISIBLE
+        resultImageView.postDelayed({
+            resultImageView.setImageResource(0) // 이미지 초기화
+            king_angry.visibility = ImageView.INVISIBLE
+            resultImageView2.visibility = ImageView.INVISIBLE
+            loadQuestion()
+        }, 2000)
+
+
     }
 
     fun setFullScreen(){
