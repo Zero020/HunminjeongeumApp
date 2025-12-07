@@ -58,7 +58,3 @@
 - 내부 DB : Sqlite DB
 - Total Project Result : Github
 
-
-
-```
-
